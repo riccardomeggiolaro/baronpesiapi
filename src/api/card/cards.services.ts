@@ -31,7 +31,7 @@ export class CardService {
             if(q.vehicle) cards.andWhere("cards.vehicle LIKE :vehicle", { vehicle: `${q.vehicle}%` })
             if(q.plate) cards.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
             if(q.socialReason) cards.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
-            if(q.idInstallation) cards.andWhere("cards.installationId = :idInstallation", { idInstallation: q.idInstallation })
+            if(q.idInstallation) cards.andWhere("cards.installationId = :idInstallation", { idInstallation: q.idInstallation["id"] })
         const result = await cards.getMany()
         return result;
     }

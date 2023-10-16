@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "outDir": "dist",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true, // dice a typescript di non guaradre tutti i tipi delle librerie che andiamo ad installare
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitAny": false, //posso scfivere delle variabili senza definirle
+      "resolveJsonModule": true,
+      "strictPropertyInitialization": false, //per far si che possa dichiarare una variabile tipizzata senza doverle assegnare un valore
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+  }
+}
+
+// FOR PRODUCTION
+// npm run build
+// cd dist
+// npm install --production

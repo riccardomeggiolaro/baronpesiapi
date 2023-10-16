@@ -2,7 +2,6 @@ import { Response, NextFunction } from "express";
 import { TypedRequest } from "../typed-request.interface";
 import { classicAdmin } from "../../global";
 import { CardDTO, UpdateCardDTO } from "../../api/card/cards.dto";
-import { EventDTO, UpdateEventDTO } from "../../api/event/events.dto";
 
 export function isToAssign(action: "update"): (req: TypedRequest<any, any, any>, res: Response, next: NextFunction) => Promise<Response>;
 export function isToAssign(action: "add"): (req: TypedRequest<any, any, any>, res: Response, next: NextFunction) => Promise<Response>;
@@ -11,7 +10,7 @@ export function isToAssign(action: "add" | "filters" | "update"){
     return async (req: TypedRequest<any, any, any>, res: Response, next: NextFunction) => {
         if(req.user?.accessLevel! < classicAdmin){
             if(action === "add"){
-                req.body = req.body as EventDTO;
+                req.body = req.body as CardDTO;
                 if(req.body.idInstallation) return res.status(400).json({message: "Non puoi scegliere un installazione"})
                 else {
                     req.body.idInstallation = req.user?.installationId;
@@ -19,20 +18,20 @@ export function isToAssign(action: "add" | "filters" | "update"){
                 }
             }
             if(action === "filters"){
-                if(req.query.idInstallation) return res.status(400).json({message: "Non puoi filtrare tramite installazione"})
+                if(req.query.idInstallation) return res.status(400).json({message: "Non puoi filtrare tramite instllazione"})
                 else {
-                    req.query.idInstallation = req.user?.installationId;
+                    req.query.idInstallation = req.user?.installationId?.id;
                     next();
                 }
             }
             if(action === "update"){
-                req.body = req.body as UpdateEventDTO;
+                req.body = req.body as UpdateCardDTO;
                 if(req.body.idInstallation) return res.status(400).json({message: "Non puoi assegnare un installazione"})
                 else next()
             }
         }else{
             if(action === "add"){
-                let b = req.body as EventDTO;
+                let b = req.body as CardDTO;
                 if(!b.idInstallation) return res.status(400).json({message: "Id installazione mancante"})
                 else next()
             }

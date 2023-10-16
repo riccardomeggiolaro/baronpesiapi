@@ -20,7 +20,7 @@ export function isToAssign(action: "add" | "filters" | "update"){
             if(action === "filters"){
                 if(req.query.idInstallation) return res.status(400).json({message: "Non puoi filtrare tramite instllazione"})
                 else {
-                    req.query.idInstallation = req.user?.installationId;
+                    req.query.idInstallation = req.user?.installationId?.id;
                     next();
                 }
             }

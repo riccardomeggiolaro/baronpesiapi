@@ -39,10 +39,14 @@ export const update = async (req: TypedRequest<UpdateUserDTO, ParsedQs, Username
         if(req.body.accessLevel && req.body.accessLevel >= req.user?.accessLevel!){
             return res.status(400).json({message: "Non puoi assegnare un livello di accesso maggiore o uguale al tuo"});
         }
-        const userData: User = omit(req.body, 'idInstallation');
+        const userData: User = omit(req.body, 'password', 'idInstallation');
         if(req.body.idInstallation){
             const installation = await InstallationService.getById(req.body.idInstallation);
             userData.installationId = installation?.id!
+        }
+        if(req.body.password){
+            const password = await UserService.hashPAssword(req.body.password);
+            userData.hashedPassword = password;
         }
         await UserService.update(req.params.username, userData);
         res.sendStatus(200);

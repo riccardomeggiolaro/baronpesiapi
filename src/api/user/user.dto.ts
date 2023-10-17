@@ -7,6 +7,7 @@ import { classicAdmin } from "../../global";
 import { JustExist } from "../../utils/validators/just-exist";
 import { IsAssignableToAdmin } from "../../utils/validators/is-assignable-to-admin";
 import * as gbl from "../../global";
+import { ThereIsValueOptional } from "../../utils/validators/there-is-value-optional";
 
 export class FilterUserDTO {
     @IsString()
@@ -57,6 +58,7 @@ export class UpdateUserDTO {
 
     @IsNumber()
     @Exist("installation", {message: "Id installazione non esistente"})
+    @ThereIsValueOptional("accessLevel", { message: "Per passare installationId devi passare anche l'accessLevel" })
     @IsOptional()
     installationId: number;
 

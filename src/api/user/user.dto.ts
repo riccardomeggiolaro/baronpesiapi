@@ -1,9 +1,12 @@
-import { IsBoolean, IsDate, IsInt, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
+import { IsBoolean, IsDate, IsInt, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 import { IsSameThan } from "../../utils/validators/is-same-than";
 import { Transform, Type } from "class-transformer";
 import { Exist } from "../../utils/validators/exist";
 import { IsDifferentFrom } from "../../utils/validators/is-different-from";
 import { classicAdmin } from "../../global";
+import { JustExist } from "../../utils/validators/just-exist";
+import { IsAssignableToAdmin } from "../../utils/validators/is-assignable-to-admin";
+import * as gbl from "../../global";
 
 export class FilterUserDTO {
     @IsString()
@@ -29,9 +32,33 @@ export class ExistUsernameTDO {
 
 export class UpdateUserDTO {
     @IsString()
-    @MaxLength(30)
+    @JustExist("username", {message: "Utente già esistente"})
+    @MinLength(8)
+    @IsOptional()
+    username: string;
+    
+    @IsString()
+    @MinLength(8)
+    // @Matches(
+    //   new RegExp('^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$'),
+    //   {
+    //     message: 'password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and a special character'
+    //   }
+    // )
     @IsOptional()
     password: string;
+
+    @IsNumber()
+    @Min(1)
+    @Max(gbl.classicAdmin)
+    @IsAssignableToAdmin('idInstallation', { message: `L'installazione è da assegnare solo se il livello di accesso è minore di ${gbl.classicAdmin}` })
+    @IsOptional()
+    accessLevel: number;
+
+    @IsNumber()
+    @Exist("installation", {message: "Id installazione non esistente"})
+    @IsOptional()
+    installationId: number;
 
     @IsBoolean()
     @IsOptional()

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ParsedQs, TypedRequest } from "../../utils/typed-request.interface";
-import { FirstUserDTO, LoginUserDTO, SigninUserDTO } from "./auth.dto";
+import { FirstUserDTO, LoginUserDTO, SigninUserDTO, UpdateUserDTO } from "./auth.dto";
 import { omit, pick, toPlainObject } from "lodash";
 import UserService from "../user/user.services";
 import { JustExistsError } from "../../errors/user-exists";
@@ -11,6 +11,7 @@ import { NotExistsError } from "../../errors/not-exist";
 import InstallationService from "../installation/installations.services";
 import { superAdmin } from "../../global";
 import { iUser } from "../../utils/auth/auth.handlers";
+import { UsernameDTO } from "../user/user.dto";
 
 export const signin = async (req: TypedRequest<SigninUserDTO>, res: Response, next: NextFunction) => {
     try{
@@ -29,6 +30,23 @@ export const signin = async (req: TypedRequest<SigninUserDTO>, res: Response, ne
         if(err instanceof JustExistsError || err instanceof NotExistsError){
             return res.status(400).send(err.message);
         }
+        next(err);
+    }
+}
+
+export const update = async (req: TypedRequest<UpdateUserDTO, ParsedQs, UsernameDTO>, res: Response, next: NextFunction) => {
+    try{
+        if(req.body.accessLevel && req.body.accessLevel >= req.user?.accessLevel!){
+            return res.status(400).json({message: "Non puoi assegnare un livello di accesso maggiore o uguale al tuo"});
+        }
+        const userData: User = omit(req.body, 'idInstallation');
+        if(req.body.idInstallation){
+            const installation = await InstallationService.getById(req.body.idInstallation);
+            userData.installationId = installation?.id!
+        }
+        await UserService.update(req.params.username, userData);
+        res.sendStatus(200);
+    }catch(err){
         next(err);
     }
 }

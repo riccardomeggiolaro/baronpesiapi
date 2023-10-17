@@ -10,7 +10,7 @@ import { UsernameDTO } from "../user/user.dto";
 const router = Router();
 
 router.post("/signin", isAdmin, validate(SigninUserDTO), signin);
-router.patch("/update/:username", isAdmin, validate(UpdateUserDTO), validate(UsernameDTO, "params"), update)
+router.patch("/:username", isAdmin, validate(UpdateUserDTO), validate(UsernameDTO, "params"), update)
 router.post("/signin/first-user", validate(FirstUserDTO), thereIsntUser(), signinFirstUser);
 router.get("/first-user", firstUser);
 router.post("/login", validate(LoginUserDTO), login);

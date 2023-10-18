@@ -93,11 +93,11 @@ export class UpdateCardDTO {
     @IsInt()
     @IsOptional()
     @Exist("subject", {message: "New id subject to assign not exist"})
-    idSubject: number
+    subjectId: number
 
     @IsInt()
     @Type(() => Number)
     @Exist("installation", {message: "Id installation to assign not exist"})
     @IsOptional()
-    idInstallation: number;
+    installationId: number;
 }

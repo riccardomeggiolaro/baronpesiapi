@@ -36,17 +36,7 @@ export const getOneCard = async (req: TypedRequest<any, ParsedQs, IDCardDTO>, re
 export const updateCard = async (req: TypedRequest<UpdateCardDTO, ParsedQs, IDCardDTO>, res: Response, next: NextFunction) => {
     try{
         if(!await hasKeyValuePairs(req.body)) return res.json({message: "Nothing to update"});
-        const subject = await SubjectService.getById(req.body.idSubject);
-        const installation = await InstalationService.getById(req.body.idInstallation);
-        const list = {
-            cardCode: req.body.cardCode,
-            vehicle: req.body.vehicle,
-            plate: req.body.plate,
-            tare: req.body.tare,
-            subject: subject,
-            installation: installation
-        }        
-        await CardService.update(req.params.id, list, req.user?.installationId?.id! || null);
+        await CardService.update(req.params.id, req.body);
         return res.status(200).json({message: `Card ${req.params.id} changed with succesfully`});
     }catch(err){
         next(err);

@@ -117,14 +117,15 @@ export class CardService {
         return result
     }
 
-    async update(id: number, subject: object, installationId: number | null): Promise<void>{
-        const q = {
-            id: id,
-        }
-        if(installationId !== null) q["installation"] = installationId
-        const updated = await CardORM.update(q, subject)
+    async update(id: number, card: any): Promise<void>{
+        const updated = await CardORM
+        .createQueryBuilder()
+        .update("cards")
+        .set(card)
+        .where("id = :id", { id: id })
+        .execute()
         if(updated.affected === 0){
-            throw new NotFoundError()
+            throw new NotFoundError();
         }
     }
 }

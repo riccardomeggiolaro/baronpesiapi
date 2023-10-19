@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, Index } from "typeorm"
 import { UserORM } from "../user/user.entity";
-import { CardORM } from "../card/card.entity";
 
 @Entity("installations")
 export class InstallationORM extends BaseEntity {

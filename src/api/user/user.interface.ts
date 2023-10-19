@@ -1,5 +1,3 @@
-import { InstallationORM } from "../installation/installation.entity";
-
 export interface User {
     id?: number;
     username?: string;

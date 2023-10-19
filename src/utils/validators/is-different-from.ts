@@ -1,4 +1,4 @@
-import { ValidationOptions, ValidatorOptions } from "class-validator";
+import { ValidationOptions } from "class-validator";
 import { registerDecorator } from "class-validator";
 import { ValidationArguments } from "class-validator";
 

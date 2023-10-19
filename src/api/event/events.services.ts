@@ -1,9 +1,10 @@
 import { NotFoundError } from "../../errors/not-found";
 import { CardORM } from "../card/card.entity";
 import { InstallationORM } from "../installation/installation.entity";
-import { SubjectORM } from "../subject/subject.entity";
 import { EventORM } from "./event.entity";
 import { EventDTO, FilterEventDTO, UpdateEventDTO } from "./events.dto";
+import cardsServices from "../card/cards.services";
+
 
 export class EventService {
     async add(newEvent: EventDTO): Promise<EventORM | null>{
@@ -31,11 +32,7 @@ export class EventService {
         const events = EventORM
             .createQueryBuilder("events")
             .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
-            .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
-            .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
-            .orderBy({
-                dt_create: "DESC"
-            })
+            .take(100)
             if(q.dtMin && !q.dtMax) events.where("events.dt_create > :dtMin", { dtMin: q.dtMin })
             if(!q.dtMin && q.dtMax) events.where("events.dt_create < :dtMax", { dtMax: q.dtMax })
             if(q.dtMin && q.dtMax) events.where("events.dt_create BETWEEN :dtMin AND :dtMax", { dtMin: q.dtMin, dtMax: q.dtMax })
@@ -44,6 +41,12 @@ export class EventService {
             if(q.socialReason) events.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
             if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })
         const result = await events.getMany()
+        const cardPromises = result.map((event) => cardsServices.getByCardCode(event.cardCode as string));
+        const cards = await Promise.all(cardPromises);
+        
+        result.forEach((event, index) => {
+          event.cardCode = cards[index] ?? event.cardCode;
+        });                  
         return result;
     }
 

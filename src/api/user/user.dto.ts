@@ -1,9 +1,8 @@
-import { IsBoolean, IsDate, IsInt, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
+import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 import { IsSameThan } from "../../utils/validators/is-same-than";
 import { Transform, Type } from "class-transformer";
 import { Exist } from "../../utils/validators/exist";
 import { IsDifferentFrom } from "../../utils/validators/is-different-from";
-import { classicAdmin } from "../../global";
 import { JustExist } from "../../utils/validators/just-exist";
 import { IsAssignableToAdmin } from "../../utils/validators/is-assignable-to-admin";
 import * as gbl from "../../global";

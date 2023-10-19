@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, Index, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index } from "typeorm"
 
 @Entity("subjects")
 export class SubjectORM extends BaseEntity {

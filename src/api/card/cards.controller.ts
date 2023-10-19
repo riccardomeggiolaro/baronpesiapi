@@ -2,8 +2,6 @@ import { Response, NextFunction } from "express"
 import { ParsedQs, TypedRequest } from "../../utils/typed-request.interface";
 import { CardDTO, FilterCardDTO, IDCardDTO, UpdateCardDTO } from "./cards.dto";
 import CardService from "./cards.services";
-import SubjectService from "../subject/subject.services";
-import InstalationService from "../installation/installations.services";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
 
 export const addCard = async (req: TypedRequest<CardDTO>, res: Response, next: NextFunction) => {

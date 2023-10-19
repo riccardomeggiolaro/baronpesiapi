@@ -1,6 +1,4 @@
 import { ValidationArguments, ValidationOptions, registerDecorator } from "class-validator";
-import { UserORM } from "../../api/user/user.entity";
-import { InstallationORM } from "../../api/installation/installation.entity";
 import UserService from "../../api/user/user.services";
 import InstallationService from "../../api/installation/installations.services";
 import SubjectService from "../../api/subject/subject.services";

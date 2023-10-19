@@ -1,7 +1,7 @@
 import { NotFoundError } from "../../errors/not-found";
 import { FilterInstallationDTO, InstallationDTO } from "./installations.dto";
 import { InstallationORM } from "./installation.entity";
-import { And, Like } from "typeorm";
+import { Like } from "typeorm";
 
 export class InstallationService {
     async add(newInstallation: InstallationDTO): Promise<InstallationORM | null>{

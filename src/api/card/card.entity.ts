@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, OneToMany, Index } from "typeorm"
-import { EventORM } from "../event/event.entity"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index } from "typeorm";
 
 @Entity("cards")
 export class CardORM extends BaseEntity {

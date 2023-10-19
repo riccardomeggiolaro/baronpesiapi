@@ -1,7 +1,4 @@
-import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, ManyToOne, PrimaryColumn, Index, JoinColumn, JoinTable } from "typeorm"
-import { InstallationORM } from "../installation/installation.entity";
-import { Query } from "typeorm/driver/Query";
-import { InstallationDTO } from "../installation/installations.dto";
+import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, Index, JoinColumn } from "typeorm"
 
 @Entity("users")
 export class UserORM extends BaseEntity {

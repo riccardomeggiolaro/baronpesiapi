@@ -1,5 +1,5 @@
-import { Transform, Type } from "class-transformer";
-import { IsInt, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
+import { Type } from "class-transformer";
+import { IsInt, IsOptional, IsString, MaxLength } from "class-validator";
 import { JustExist } from "../../utils/validators/just-exist";
 import { NumberLength } from "../../utils/validators/number-length";
 

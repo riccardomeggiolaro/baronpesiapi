@@ -3,9 +3,7 @@ import { FirstUserDTO, LoginUserDTO, SigninUserDTO } from "./auth.dto";
 import { firstUser, login, signin, signinFirstUser } from "./auth.controller";
 import { validate } from "../../utils/middleware/validation.middleware";
 import { isAdmin } from "../../utils/middleware/authentication.middleware";
-import { limiterLogin } from "../../global";
 import { thereIsntUser } from "../../utils/middleware/there-isnt-user.middleware";
-import { UsernameDTO } from "../user/user.dto";
 
 const router = Router();
 

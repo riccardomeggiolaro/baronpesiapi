@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsOptional, IsString, Max, Min, MinLength } from "class-validator";
+import { IsNumber, IsOptional, IsString, Max, Min, MinLength } from "class-validator";
 import * as gbl from "../../global";
 import { IsAssignableToAdmin } from "../../utils/validators/is-assignable-to-admin";
 import { JustExist } from "../../utils/validators/just-exist";

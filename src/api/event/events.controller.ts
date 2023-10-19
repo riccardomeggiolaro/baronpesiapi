@@ -4,8 +4,6 @@ import { EventDTO, FilterEventDTO, IDEventDTO, UpdateEventDTO } from "./events.d
 import CardService from "../card/cards.services";
 import EventService from "./events.services";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
-import { Between, LessThan, Like, MoreThan } from "typeorm";
-import InstallationService from "../installation/installations.services";
 
 export const addEvent = async (req: TypedRequest<EventDTO>, res: Response, next: NextFunction) => {
     try{

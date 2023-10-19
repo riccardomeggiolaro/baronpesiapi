@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Index, JoinColumn } from "typeorm"
-import { InstallationORM } from "../installation/installation.entity";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index, JoinColumn } from "typeorm";
 import { CardORM } from "../card/card.entity";
 
-@Entity("events")
+@Entity("events", {orderBy: {
+    dt_create: 'DESC'
+}})
 export class EventORM extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -48,7 +49,7 @@ export class EventORM extends BaseEntity {
 
     @Column({type: "varchar", length: 30, nullable: true})
     @JoinColumn({ name: 'cardCode' })
-    cardCode: string
+    cardCode: string | CardORM;
 
     @Column({type: "bigint", width: 20})
     rawid: number;

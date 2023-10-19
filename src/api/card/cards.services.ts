@@ -2,7 +2,6 @@ import { SubjectORM } from "../subject/subject.entity";
 import { NotFoundError } from "../../errors/not-found";
 import { CardDTO, FilterCardDTO } from "./cards.dto";
 import { CardORM } from "./card.entity";
-import { Like } from "typeorm";
 import { InstallationORM } from "../installation/installation.entity";
 
 export class CardService {

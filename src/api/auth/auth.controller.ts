@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ParsedQs, TypedRequest } from "../../utils/typed-request.interface";
+import { TypedRequest } from "../../utils/typed-request.interface";
 import { FirstUserDTO, LoginUserDTO, SigninUserDTO } from "./auth.dto";
 import { omit, pick, toPlainObject } from "lodash";
 import UserService from "../user/user.services";
@@ -11,7 +11,6 @@ import { NotExistsError } from "../../errors/not-exist";
 import InstallationService from "../installation/installations.services";
 import { superAdmin } from "../../global";
 import { iUser } from "../../utils/auth/auth.handlers";
-import { UsernameDTO } from "../user/user.dto";
 
 export const signin = async (req: TypedRequest<SigninUserDTO>, res: Response, next: NextFunction) => {
     try{

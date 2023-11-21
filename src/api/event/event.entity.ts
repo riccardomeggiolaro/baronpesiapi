@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index, JoinColumn } from "typeorm";
 import { CardORM } from "../card/card.entity";
+import { InstallationORM } from "../installation/installation.entity";
 
 @Entity("events", {orderBy: {
     dt_create: 'DESC'
@@ -9,7 +10,6 @@ export class EventORM extends BaseEntity {
     id: number;
 
     @Column({type: "int", nullable: true})
-    @JoinColumn({ name: 'installationId' })
     installationId: number | null;
 
     @Index()

@@ -4,7 +4,8 @@ import { InstallationORM } from "../installation/installation.entity";
 import { EventORM } from "./event.entity";
 import { EventDTO, FilterEventDTO, UpdateEventDTO } from "./events.dto";
 import cardsServices from "../card/cards.services";
-
+import { SubjectORM } from "../subject/subject.entity";
+import { AppDataSource } from "../../app";
 
 export class EventService {
     async add(newEvent: EventDTO): Promise<EventORM | null>{
@@ -28,25 +29,22 @@ export class EventService {
         return eventCreated;
     }
 
-    async list(q: FilterEventDTO): Promise<EventORM[] | []>{
-        const events = EventORM
-            .createQueryBuilder("events")
-            .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
-            .take(100)
-            if(q.dtMin && !q.dtMax) events.where("events.dt_create > :dtMin", { dtMin: q.dtMin })
-            if(!q.dtMin && q.dtMax) events.where("events.dt_create < :dtMax", { dtMax: q.dtMax })
-            if(q.dtMin && q.dtMax) events.where("events.dt_create BETWEEN :dtMin AND :dtMax", { dtMin: q.dtMin, dtMax: q.dtMax })
-            if(q.cardCode) events.andWhere("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
-            if(q.plate) events.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
-            if(q.socialReason) events.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
-            if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })
+    async list(q: FilterEventDTO, takeLimit: boolean): Promise<EventORM[] | []>{
+        const events = AppDataSource.getRepository(EventORM)
+        .createQueryBuilder("events")
+        .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
+        .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
+        .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+        if(takeLimit) events.take(100)
+        if(!takeLimit) events.take(5000)
+        if(q.dtMin && !q.dtMax) events.where("events.dt_create > :dtMin", { dtMin: q.dtMin })
+        if(!q.dtMin && q.dtMax) events.where("events.dt_create < :dtMax", { dtMax: q.dtMax })
+        if(q.dtMin && q.dtMax) events.where("events.dt_create BETWEEN :dtMin AND :dtMax", { dtMin: q.dtMin, dtMax: q.dtMax })
+        if(q.cardCode) events.andWhere("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
+        if(q.plate) events.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
+        if(q.socialReason) events.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
+        if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })
         const result = await events.getMany()
-        const cardPromises = result.map((event) => cardsServices.getByCardCode(event.cardCode as string));
-        const cards = await Promise.all(cardPromises);
-        
-        result.forEach((event, index) => {
-          event.cardCode = cards[index] ?? event.cardCode;
-        });                  
         return result;
     }
 

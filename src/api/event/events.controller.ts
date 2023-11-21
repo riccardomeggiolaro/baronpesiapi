@@ -4,6 +4,8 @@ import { EventDTO, FilterEventDTO, IDEventDTO, UpdateEventDTO } from "./events.d
 import CardService from "../card/cards.services";
 import EventService from "./events.services";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
+import { exportCsv, exportData, exportPdf } from "../../utils/export-data";
+import PDFDocument from "pdfkit-table";
 
 export const addEvent = async (req: TypedRequest<EventDTO>, res: Response, next: NextFunction) => {
     try{
@@ -18,10 +20,41 @@ export const addEvent = async (req: TypedRequest<EventDTO>, res: Response, next:
 
 export const listEvents = async (req: TypedRequest<any, FilterEventDTO>, res: Response, next: NextFunction) => {
     try{
-        const events = await EventService.list(req.query);
+        const events = await EventService.list(req.query, true);
         return res.json(events);
     }catch(err){
         next(err);
+    }
+}
+
+export const exportEvents = async (req: TypedRequest<any, FilterEventDTO, any>, res: Response, next: NextFunction) => {
+    try{
+        const event = await EventService.list(req.query, false);
+        if(req.params.type === "xlsx"){
+            const workbook = exportData(event);
+            res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            res.setHeader("Content-Disposition", "attachment; filename=" + "data.xlsx");
+            return workbook.xlsx.write(res).then(function () {
+              res.status(200).end();
+            });
+        }else if(req.params.type === "csv"){
+            res.setHeader('Content-Type', 'text/csv');
+            res.setHeader('Content-Disposition', 'attachment; filename="data.csv"');
+            const csvString = exportCsv(event);
+            return res.send(csvString);
+        }else if(req.params.type === "pdf"){
+            const doc = new PDFDocument({ margin: 20, size: 'A4', layout: "landscape" })
+            doc.pipe(res);
+            const table = exportPdf(event)
+            await doc.table(table, { /* options */ });
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", 'inline; filename="data.pdf"');
+            doc.end();
+        }else{
+            return res.json({message: "Type non supported"})
+        }
+    }catch(err){
+        next(err)
     }
 }
 

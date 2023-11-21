@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index, OneToOne } from "typeorm";
+import { EventORM } from "../event/event.entity";
 
 @Entity("cards")
 export class CardORM extends BaseEntity {
@@ -24,5 +25,5 @@ export class CardORM extends BaseEntity {
 
     @Column({type: "int", nullable: true})
     @JoinColumn({ name: 'installationId' })
-    installationId: number | null;
+    installationId: number | null;  
 }

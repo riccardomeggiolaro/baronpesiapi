@@ -9,7 +9,7 @@ const router = Router();
 
 router.post("/add-event", isAuthenticated, validate(EventDTO), isToAssign("add"), addEvent);
 router.get("/list", isAuthenticated, validate(FilterEventDTO, "query"), isToAssign("filters"), listEvents);
-router.get("/export-list/:type", validate(FilterEventDTO, "query"), isToAssign("filters"), exportEvents);
+router.get("/export-list/:type", isAuthenticated, validate(FilterEventDTO, "query"), isToAssign("filters"), exportEvents);
 router.get("/:id", isAuthenticated, validate(IDEventDTO, "params"), getOneEvent);
 router.patch("/:id", isAuthenticated, validate(UpdateEventDTO), validate(IDEventDTO, "params"), isToAssign("update"), updateEvent);
 router.delete("/:id", isAuthenticated, validate(IDEventDTO, "params"), deleteEvent);

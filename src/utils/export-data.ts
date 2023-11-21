@@ -9,7 +9,8 @@ const exportData = (data) => {
       "Codice carta": k.cardCode?.cardCode,
       "Targa": k.cardCode?.plate,
       "Ragione sociale": k.cardCode?.subjectId?.socialReason,
-      "Pid1-Pid2": k.pid1 + "\n" + x.pid2,
+      "Pid1": k.pid1,
+      "Pid2": k.pid2,
       "Peso1": k.weight1,
       "Peso2": k.weight2,
       "Netto": k.netWeight,
@@ -26,7 +27,7 @@ export const exportXlsx = (data) => {
   const onlyNameAndSymbolArr = exportData(data);
   let workbook = new exceljs.Workbook();
   let worksheet = workbook.addWorksheet("Worksheet");
-  let columns = data.reduce((acc, obj) => acc = Object.getOwnPropertyNames(obj), [])  
+  let columns = onlyNameAndSymbolArr.reduce((acc, obj) => acc = Object.getOwnPropertyNames(obj), [])  
   worksheet.columns = columns.map((el) => {
     return { header: el, key: el, width: 20 };
   });
@@ -42,7 +43,8 @@ export const exportCsv = (data) => {
           { id: 'Codice carta', title: 'Codice carta' },
           { id: 'Targa', title: 'Targa' },
           { id: 'Ragione sociale', title: 'Ragione sociale' },
-          { id: 'Pid1-Pid2', title: 'Pid1-Pid2' },
+          { id: 'Pid1', title: 'Pid1' },
+          { id: 'Pid2', title: 'Pid2' },
           { id: 'Peso1', title: 'Peso1' },
           { id: 'Peso2', title: 'Peso2' },
           { id: 'Netto', title: 'Netto' },
@@ -76,9 +78,9 @@ export const exportPdf = (data) => {
   })
   const table = { 
     title: '',
-    headers: ["Data", "Codice Carta", "Targa", "Ragione Sociale", "Pid1/Pid2", "Peso1", "Peso2", "Peso Netto", "Materiale", "Codice Installazione", "Note1", "Note2"],
+    headers: ["Data", "Codice Carta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice Installazione", "Note 1", "Note 2"],
     datas: [],
-    rows: pesate,
+    rows: pesate
   };
   return table;
 }

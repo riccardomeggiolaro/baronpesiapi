@@ -1,7 +1,7 @@
 import { createObjectCsvStringifier } from "csv-writer";
 const exceljs = require("exceljs");
 
-const data = (data) => {
+const exportData = (data) => {
   const onlyNameAndSymbolArr: Partial<any>[] = data.map(x => {
     const k = x as any;
     return {
@@ -22,8 +22,8 @@ const data = (data) => {
   return onlyNameAndSymbolArr;
 }
 
-export const exportData = (data) => {
-  const onlyNameAndSymbolArr = data(data);
+export const exportXlsx = (data) => {
+  const onlyNameAndSymbolArr = exportData(data);
   let workbook = new exceljs.Workbook();
   let worksheet = workbook.addWorksheet("Worksheet");
   let columns = data.reduce((acc, obj) => acc = Object.getOwnPropertyNames(obj), [])  
@@ -35,7 +35,7 @@ export const exportData = (data) => {
 };
 
 export const exportCsv = (data) => {
-  const onlyNameAndSymbolArr = data(data);
+  const onlyNameAndSymbolArr = exportData(data);
     const csvStringifier = createObjectCsvStringifier({
         header: [
           { id: 'Data', title: 'Data' },

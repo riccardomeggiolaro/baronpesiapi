@@ -4,7 +4,7 @@ import { EventDTO, FilterEventDTO, IDEventDTO, UpdateEventDTO } from "./events.d
 import CardService from "../card/cards.services";
 import EventService from "./events.services";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
-import { exportCsv, exportData, exportPdf } from "../../utils/export-data";
+import { exportCsv, exportPdf, exportXlsx } from "../../utils/export-data";
 import PDFDocument from "pdfkit-table";
 
 export const addEvent = async (req: TypedRequest<EventDTO>, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ export const exportEvents = async (req: TypedRequest<any, FilterEventDTO, any>, 
     try{
         const event = await EventService.list(req.query, false);
         if(req.params.type === "xlsx"){
-            const workbook = exportData(event);
+            const workbook = exportXlsx(event);
             res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             res.setHeader("Content-Disposition", "attachment; filename=" + "data.xlsx");
             return workbook.xlsx.write(res).then(function () {

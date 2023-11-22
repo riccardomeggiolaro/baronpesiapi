@@ -6,12 +6,12 @@ import { NumberLength } from "../../utils/validators/number-length";
 export class SubjectDTO {
     @IsString()
     @MaxLength(50)
-    @JustExist("subject", {message: "Codice soggetto già esistente"})
+    @JustExist("subject", {message: "Ragione sociale già esistente"})
     socialReason: string;
 
     @IsInt()
     @Type(() => Number)
-    @NumberLength(9, { message: "telephoneNumber must smaller or equal than 9" })
+    @NumberLength(9, { message: "Il numero di telefono deve avere massimo 9 numeri" })
     telephoneNumber: number;
 
     @IsString()
@@ -46,13 +46,13 @@ export class UpdateSubjectDTO {
     @IsString()
     @MaxLength(50)
     @IsOptional()
-    @JustExist("subject", {message: "Codice soggetto già esistente"})
+    @JustExist("subject", {message: "Ragione sociale già esistente"})
     socialReason: string;
 
     @IsInt()
     @IsOptional()
     @Type(() => Number)
-    @NumberLength(9, { message: "telephoneNumber must smaller or equal than 9" })
+    @NumberLength(9, { message: "Il numero di telefono deve avere massimo 9 numeri" })
     telephoneNumber: number;
 
     @IsString()

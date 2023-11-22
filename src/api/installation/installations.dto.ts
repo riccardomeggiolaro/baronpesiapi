@@ -5,7 +5,7 @@ import { JustExist } from "../../utils/validators/just-exist";
 export class InstallationDTO {
     @IsString()
     @MaxLength(50)
-    @JustExist("installation", {message: "Installation code just exist"})
+    @JustExist("installation", {message: "Codice installazione già esistente"})
     installationCode: string;
 
     @IsString()
@@ -41,7 +41,7 @@ export class UpdateDTO {
     @IsString()
     @MaxLength(50)
     @IsOptional()
-    @JustExist("installation", {message: "Installation code just exist"})
+    @JustExist("installation", {message: "Codice installazione già esistente"})
     installationCode: string;
 
     @IsString()

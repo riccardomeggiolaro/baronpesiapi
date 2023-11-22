@@ -6,7 +6,7 @@ import { Exist } from "../../utils/validators/exist";
 export class CardDTO {
     @IsString()
     @MaxLength(30)
-    @JustExist("card", {message: "Card code just exist"})
+    @JustExist("card", {message: "Codice carta già esistente"})
     cardCode: string
     
     @IsString()
@@ -22,12 +22,12 @@ export class CardDTO {
     tare: number
     
     @IsInt()
-    @Exist("subject", {message: "Id subject to assign not exist"})
+    @Exist("subject", {message: "Soggetto non esistente"})
     idSubject: number
 
     @IsOptional()
     @IsInt()
-    @Exist("installation", {message: "Id installation to assign not exist"})
+    @Exist("installation", {message: "Installazione non esistente"})
     idInstallation: number;
 }
 
@@ -72,7 +72,7 @@ export class UpdateCardDTO {
     @IsString()
     @MaxLength(30)
     @IsOptional()
-    @JustExist("card", {message: "Card code just exist"})
+    @JustExist("card", {message: "Codice carta già esistente"})
     cardCode: string
     
     @IsString()
@@ -92,12 +92,12 @@ export class UpdateCardDTO {
     
     @IsInt()
     @IsOptional()
-    @Exist("subject", {message: "New id subject to assign not exist"})
+    @Exist("subject", {message: "Soggetto non esistente"})
     subjectId: number
 
     @IsInt()
     @Type(() => Number)
-    @Exist("installation", {message: "Id installation to assign not exist"})
+    @Exist("installation", {message: "Installazione non esistente"})
     @IsOptional()
     installationId: number;
 }

@@ -1,6 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, Index, OneToOne } from "typeorm"
-import { UserORM } from "../user/user.entity";
-import { EventORM } from "../event/event.entity";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index } from "typeorm"
 
 @Entity("installations")
 export class InstallationORM extends BaseEntity {

@@ -27,7 +27,7 @@ export class SigninUserDTO {
     accessLevel: number;
 
     @IsNumber()
-    @Exist("installation", {message: "Id installazione non esistente"})
+    @Exist("installation", {message: "Installazione non esistente"})
     @IsOptional()
     idInstallation: number;
 }

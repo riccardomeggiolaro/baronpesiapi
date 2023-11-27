@@ -27,7 +27,6 @@ export class CardService {
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
-            if(q.cardCode) cards.where("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
             if(q.numberCard) cards.where("cards.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
             if(q.vehicle) cards.andWhere("cards.vehicle LIKE :vehicle", { vehicle: `${q.vehicle}%` })
             if(q.plate) cards.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })

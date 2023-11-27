@@ -24,6 +24,7 @@ export function isToAssign(action: "add" | "filters" | "update"){
                 req.body = req.body as UpdateCardDTO;
                 if(req.body.installationId) return res.status(400).json({message: "Non puoi assegnare una installazione"})
                 if(req.body.cardCode) return res.status(400).json({message: "Non puoi assegnare un codice carta"})
+                if(req.body.numberCard) return res.status(400).json({message: "Non puoi assegnare un numero carta"})
                 else next()
             }
         }else{

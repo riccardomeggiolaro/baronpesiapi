@@ -44,11 +44,6 @@ export class IDCardDTO{
 
 export class FilterCardDTO {
     @IsString()
-    @MaxLength(30)
-    @IsOptional()
-    cardCode: string
-
-    @IsString()
     @IsOptional()
     @MaxLength(4)
     numberCard: string;

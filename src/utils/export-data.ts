@@ -6,7 +6,7 @@ const exportData = (data) => {
     const k = x as any;
     return {
       "Data": new Date(k.dt_create).toLocaleString(),
-      "Codice carta": k.cardCode?.cardCode,
+      "Numero carta": k.cardCode?.numberCard,
       "Targa": k.cardCode?.plate,
       "Ragione sociale": k.cardCode?.subjectId?.socialReason,
       "Pid1": k.pid1,
@@ -40,7 +40,7 @@ export const exportCsv = (data) => {
     const csvStringifier = createObjectCsvStringifier({
         header: [
           { id: 'Data', title: 'Data' },
-          { id: 'Codice carta', title: 'Codice carta' },
+          { id: 'Numero carta', title: 'Numero carta' },
           { id: 'Targa', title: 'Targa' },
           { id: 'Ragione sociale', title: 'Ragione sociale' },
           { id: 'Pid1', title: 'Pid1' },
@@ -63,7 +63,7 @@ export const exportPdf = (data) => {
     const k = x as any;
     return [
       new Date(k.dt_create).toLocaleString(),
-      k.cardCode?.cardCode,
+      k.cardCode?.numberCard,
       k.cardCode?.plate,
       k.cardCode?.subjectId?.socialReason,
       k.pid1 + "\n" + x.pid2,
@@ -78,7 +78,7 @@ export const exportPdf = (data) => {
   })
   const table = { 
     title: '',
-    headers: ["Data", "Codice Carta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice Installazione", "Note 1", "Note 2"],
+    headers: ["Data", "Numero Carta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice Installazione", "Note 1", "Note 2"],
     datas: [],
     rows: pesate
   };

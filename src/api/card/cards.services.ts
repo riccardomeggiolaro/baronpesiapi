@@ -8,6 +8,7 @@ export class CardService {
     async add(newCard: CardDTO): Promise<CardORM | null>{
         const card = new CardORM();
         card.cardCode = newCard.cardCode;
+        card.numberCard = newCard.numberCard;
         card.vehicle = newCard.vehicle;
         card.plate = newCard.plate;
         card.tare = newCard.tare || 0;
@@ -27,6 +28,7 @@ export class CardService {
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             if(q.cardCode) cards.where("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
+            if(q.numberCard) cards.where("cards.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
             if(q.vehicle) cards.andWhere("cards.vehicle LIKE :vehicle", { vehicle: `${q.vehicle}%` })
             if(q.plate) cards.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
             if(q.socialReason) cards.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
@@ -113,6 +115,16 @@ export class CardService {
             if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
         const result = await card.getOne()
         return result
+    }
+
+    async getByNumberCard(numberCard: string): Promise<CardORM | null>{
+        const card = await CardORM
+            .createQueryBuilder("cards")
+            .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
+            .where("cards.numberCard = :numberCard", { numberCard: numberCard })
+            .getOne()
+        return card;
     }
 
     async update(id: number, card: any): Promise<void>{

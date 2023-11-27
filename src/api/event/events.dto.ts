@@ -65,8 +65,14 @@ export class FilterEventDTO {
     dtMax: Date
 
     @IsString()
+    @MaxLength(30)
     @IsOptional()
     cardCode: string
+
+    @IsString()
+    @MaxLength(4)
+    @IsOptional()
+    numberCard: string 
     
     @IsString()
     @MaxLength(10)

@@ -8,6 +8,11 @@ export class CardDTO {
     @MaxLength(30)
     @JustExist("card", {message: "Codice carta già esistente"})
     cardCode: string
+
+    @IsString()
+    @MaxLength(4)
+    @JustExist("numberCard", {message: "Numero carta già esistente"})
+    numberCard: string
     
     @IsString()
     @MaxLength(20)
@@ -42,6 +47,11 @@ export class FilterCardDTO {
     @MaxLength(30)
     @IsOptional()
     cardCode: string
+
+    @IsString()
+    @IsOptional()
+    @MaxLength(4)
+    numberCard: string;
     
     @IsString()
     @MaxLength(20)
@@ -74,6 +84,12 @@ export class UpdateCardDTO {
     @IsOptional()
     @JustExist("card", {message: "Codice carta già esistente"})
     cardCode: string
+
+    @IsString()
+    @MaxLength(4)
+    @IsOptional()
+    @JustExist("numberCard", {message: "Numero carta già esistente"})
+    numberCard: string
     
     @IsString()
     @MaxLength(20)

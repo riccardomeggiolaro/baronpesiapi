@@ -3,7 +3,6 @@ import { CardORM } from "../card/card.entity";
 import { InstallationORM } from "../installation/installation.entity";
 import { EventORM } from "./event.entity";
 import { EventDTO, FilterEventDTO, UpdateEventDTO } from "./events.dto";
-import cardsServices from "../card/cards.services";
 import { SubjectORM } from "../subject/subject.entity";
 import { AppDataSource } from "../../app";
 
@@ -41,6 +40,7 @@ export class EventService {
         if(!q.dtMin && q.dtMax) events.where("events.dt_create < :dtMax", { dtMax: q.dtMax })
         if(q.dtMin && q.dtMax) events.where("events.dt_create BETWEEN :dtMin AND :dtMax", { dtMin: q.dtMin, dtMax: q.dtMax })
         if(q.cardCode) events.andWhere("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
+        if(q.numberCard) events.andWhere("cards.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
         if(q.plate) events.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
         if(q.socialReason) events.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
         if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })

@@ -4,7 +4,7 @@ import InstallationService from "../../api/installation/installations.services";
 import SubjectService from "../../api/subject/subject.services";
 import CardService from "../../api/card/cards.services";
 
-export function JustExist(property: "username" | "installation" | "subject" | "card", validationOptions?: ValidationOptions) {
+export function JustExist(property: "username" | "installation" | "subject" | "card" | "numberCard", validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
       registerDecorator({
         name: 'isJustExist',
@@ -23,9 +23,14 @@ export function JustExist(property: "username" | "installation" | "subject" | "c
             }else if(property === "subject") {
               if(await SubjectService.getBySocialReason(value)) return false;
               return true;
-            }else{
+            }else if(property === "card"){
               if(await CardService.getByCardCode(value)) return false;
               return true;
+            }else if(property === "numberCard"){
+              if (await CardService.getByNumberCard(value)) return false;
+              return true;
+            }else{
+              return false;
             }
           }
         },

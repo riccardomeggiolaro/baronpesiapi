@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index, OneToOne } from "typeorm";
-import { EventORM } from "../event/event.entity";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index } from "typeorm";
 
 @Entity("cards")
 export class CardORM extends BaseEntity {
@@ -9,6 +8,9 @@ export class CardORM extends BaseEntity {
     @Index()
     @Column({type: "varchar", length: 30})
     cardCode: string
+
+    @Column({type: "char", length: 4})
+    numberCard: string
 
     @Column({type: "varchar", length: 20})
     vehicle: string

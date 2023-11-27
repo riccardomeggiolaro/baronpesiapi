@@ -16,6 +16,7 @@ const exportData = (data) => {
       "Netto": k.netWeight,
       "Materiale": k.material,
       "Codice installazione": k.installationId?.installationCode,
+      "Descrizione installazione": k.installationId?.description,
       "Note1": k.note1,
       "Note2": k.note2
     }
@@ -50,6 +51,7 @@ export const exportCsv = (data) => {
           { id: 'Netto', title: 'Netto' },
           { id: 'Materiale', title: 'Materiale' },
           { id: 'Codice installazione', title: 'Codice installazione' },
+          { id: 'Descrizione installazione', title: 'Descrizione installazione' },
           { id: 'Note1', title: 'Note1' },
           { id: 'Note2', title: 'Note2' },
         ],
@@ -72,13 +74,14 @@ export const exportPdf = (data) => {
       k.netWeight,
       k.material,
       k.installationId?.installationCode,
+      k.installationId?.description,
       k.note1,
       k.note2
     ]
   })
   const table = { 
     title: '',
-    headers: ["Data", "Numero Carta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice Installazione", "Note 1", "Note 2"],
+    headers: ["Data", "Numero \nCarta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice \nInstallazione", "Descrizione \ninstallazione", "Note 1", "Note 2"],
     datas: [],
     rows: pesate
   };

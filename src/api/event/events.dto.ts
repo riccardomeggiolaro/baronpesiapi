@@ -37,8 +37,8 @@ export class EventDTO {
     @IsInt()
     netWeight: number
 
-    @IsInt()
-    @Exist("card", {message: "Codice carta non esistente"})
+    @IsString()
+    @Exist("cardCode", {message: "Codice carta non esistente"})
     cardCode: string;
 
     @IsOptional()

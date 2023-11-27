@@ -42,7 +42,6 @@ passport.use("jwt_admin", new JwtStrategy(
                 .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
                 .where("users.id = :id", { id: token.id })
                 .getOne()
-            console.log(user)
             if(user && user.accessLevel >= gbl.classicAdmin && user.able){
                 const data = toPlainObject(user);
                 return done(null, data);
@@ -68,7 +67,6 @@ passport.use("jwt_super_admin", new JwtStrategy(
                 .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
                 .where("users.id = :id", { id: token.id })
                 .getOne()
-            console.log(user)
             if(user && user.accessLevel === gbl.superAdmin && user.able){
                 const data = toPlainObject(user);
                 return done(null, data);

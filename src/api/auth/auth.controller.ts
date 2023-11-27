@@ -41,7 +41,6 @@ export const signinFirstUser = async (req: TypedRequest<FirstUserDTO>, res: Resp
         const credentials = req.body;
         const newUser = await UserService.add(userData, credentials);
         req.user = newUser as iUser
-        console.log(req.user);
         const token = jwt.sign(toPlainObject(req.user), process.env.JWT_SECRET!, {expiresIn: '7 days'})
         return res.json({user: newUser, token: token});
     }catch(err){

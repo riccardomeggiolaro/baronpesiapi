@@ -1,4 +1,4 @@
-const exceljs = require("exceljs");
+import exceljs from "exceljs";
 import { Parser } from "json2csv";
 
 const exportData = (data) => {

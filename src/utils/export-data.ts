@@ -1,5 +1,5 @@
-import { createObjectCsvStringifier } from "csv-writer";
 const exceljs = require("exceljs");
+import { Parser } from "json2csv";
 
 const exportData = (data) => {
   const onlyNameAndSymbolArr: Partial<any>[] = data.map(x => {
@@ -38,26 +38,9 @@ export const exportXlsx = (data) => {
 
 export const exportCsv = (data) => {
   const onlyNameAndSymbolArr = exportData(data);
-    const csvStringifier = createObjectCsvStringifier({
-        header: [
-          { id: 'Data', title: 'Data' },
-          { id: 'Numero carta', title: 'Numero carta' },
-          { id: 'Targa', title: 'Targa' },
-          { id: 'Ragione sociale', title: 'Ragione sociale' },
-          { id: 'Pid1', title: 'Pid1' },
-          { id: 'Pid2', title: 'Pid2' },
-          { id: 'Peso1', title: 'Peso1' },
-          { id: 'Peso2', title: 'Peso2' },
-          { id: 'Netto', title: 'Netto' },
-          { id: 'Materiale', title: 'Materiale' },
-          { id: 'Codice installazione', title: 'Codice installazione' },
-          { id: 'Descrizione installazione', title: 'Descrizione installazione' },
-          { id: 'Note1', title: 'Note1' },
-          { id: 'Note2', title: 'Note2' },
-        ],
-    });
-    const csvString = csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(onlyNameAndSymbolArr);
-    return csvString;
+  const json2csvParser = new Parser();
+  const csv = json2csvParser.parse(onlyNameAndSymbolArr);
+  return csv;
 }  
 
 export const exportPdf = (data) => {

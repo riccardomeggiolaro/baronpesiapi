@@ -24,7 +24,7 @@ export const AppDataSource = new DataSource({
     password: process.env.PASSWORD_DB,
     database: process.env.NAME_DB,
     entities: [UserORM, SubjectORM, CardORM, InstallationORM, EventORM],
-    synchronize: true,
+    synchronize: false,
     logging: false
 })
 

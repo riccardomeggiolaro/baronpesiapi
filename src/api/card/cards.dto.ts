@@ -30,7 +30,6 @@ export class CardDTO {
     @Exist("subject", {message: "Soggetto non esistente"})
     idSubject: number
 
-    @IsOptional()
     @IsInt()
     @Exist("installation", {message: "Installazione non esistente"})
     idInstallation: number;

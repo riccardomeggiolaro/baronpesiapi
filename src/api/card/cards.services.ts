@@ -4,9 +4,9 @@ import { CardDTO, FilterCardDTO } from "./cards.dto";
 import { CardORM } from "./card.entity";
 import { InstallationORM } from "../installation/installation.entity";
 
-export class CardService {
+export class CardService {    
     async add(newCard: CardDTO): Promise<CardORM | null>{
-        const card = new CardORM();
+        const card = new CardORM(); // Create new card
         card.cardCode = newCard.cardCode;
         card.numberCard = newCard.numberCard;
         card.vehicle = newCard.vehicle;
@@ -14,15 +14,17 @@ export class CardService {
         card.tare = newCard.tare || 0;
         card.subjectId = newCard.idSubject;
         card.installationId = newCard.idInstallation;
-        const created = await card.save();
+        const created = await card.save(); // Save new card
+        // Check if card was created
         if(!created){
             throw new NotFoundError();
         }
-        const cardCreated = await this.getByCardCodeWithError(created.cardCode)
+        const cardCreated = await this.getByCardCodeWithError(created.cardCode) // Check if card was created
         return cardCreated;
     }
 
     async list(q: FilterCardDTO): Promise<CardORM[] | []>{
+        // Create query to find cards filtered
         const cards = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -36,18 +38,16 @@ export class CardService {
         return result;
     }
 
-    async delete(id: number, installationId: number | null): Promise<void>{
-        const q = {
-            id: id
-        }
-        if(installationId !== null) q["installation"] = installationId
-        const deleted = await CardORM.delete(q)
+    async delete(id: number): Promise<void>{
+        const deleted = await CardORM.delete({ id: id }) // Delete the card by q params
+        // Check if the card was deleted
         if(deleted.affected === 0){
             throw new NotFoundError();
         }
     }
 
     async getById(id: number): Promise<CardORM | null>{
+        // Create query to select the card by id
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -58,6 +58,7 @@ export class CardService {
     }
 
     async getByIdAndInstallationWithError(id: number, installationId: number | null): Promise<CardORM>{
+        // Create query to get the card by id and installation id
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -65,6 +66,7 @@ export class CardService {
             .where("cards.id = :id", { id: id });
             if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
         const result = await card.getOne()
+        // Check if the card found
         if(!result){
             throw new NotFoundError();
         }
@@ -72,6 +74,7 @@ export class CardService {
     }
 
     async getByIdAndInstallation(id: number, installationId: number | null): Promise<CardORM | null>{
+        // Create query to get the card by id and installation
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -83,6 +86,7 @@ export class CardService {
     }
 
     async getByCardCode(cardCode: string): Promise<CardORM | null>{
+        // Create query to get the card by cardCode
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -93,12 +97,14 @@ export class CardService {
     }
 
     async getByCardCodeWithError(cardCode: string): Promise<CardORM>{
+        // Create query to get the card by cardCode
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.cardCode = :cardCode", { cardCode: cardCode })
             .getOne()
+        // Check if the card found
         if(!card){
             throw new NotFoundError()
         }
@@ -106,6 +112,7 @@ export class CardService {
     }
 
     async getByCardCodeAndInstallation(cardCode: string, installationId: number | null): Promise<CardORM | null>{
+        // Create query to get the card by cardCode and installation
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -117,6 +124,7 @@ export class CardService {
     }
 
     async getByNumberCard(numberCard: string): Promise<CardORM | null>{
+        // Create query to get the card by numerCard
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
@@ -126,14 +134,20 @@ export class CardService {
         return card;
     }
 
-    async update(id: number, card: any): Promise<void>{
-        const updated = await CardORM
+    async update(id: number, installationId: number | null, card: any): Promise<void>{
+        // Create query to update the card by id and passing an object with parameters contains value to update
+        const updated = CardORM
         .createQueryBuilder()
         .update("cards")
         .set(card)
         .where("id = :id", { id: id })
-        .execute()
-        if(updated.affected === 0){
+        // If installationId is different from null add parameter
+        if(installationId !== null){
+            updated.andWhere("installationId = :installationId", { installationId: installationId })
+        }
+        const cardUpdated = await updated.execute()
+        // Check if the card was updated
+        if(cardUpdated.affected === 0){
             throw new NotFoundError();
         }
     }

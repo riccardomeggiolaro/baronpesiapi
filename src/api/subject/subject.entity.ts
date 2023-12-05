@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index } from "typeorm"
 
+// Create entity ORM to map the table subjects
 @Entity("subjects")
 export class SubjectORM extends BaseEntity {
     @PrimaryGeneratedColumn()

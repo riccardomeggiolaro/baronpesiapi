@@ -6,52 +6,61 @@ import * as gbl from "../../global";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
 
 export const addInstallation = async (req: TypedRequest<InstallationDTO>, res: Response, next: NextFunction) => {
-    const newInstallation = await InstallationService.add(req.body);
-    return res.status(201).json(newInstallation);
+    try {
+        const newInstallation = await InstallationService.add(req.body); // Attempt to create a new installation using the InstallationService.
+        return res.status(201).json(newInstallation); // If the installation was created successfully, send a 201 Created response with the new installation data.
+    } catch (err) {
+        next(); // Pass errors to the next middleware handler
+    }
 }
 
 export const listInstallations = async (req: TypedRequest<any, FilterInstallationDTO>, res: Response, next: NextFunction) => {
-    const installations = await InstallationService.list(req.query);
-    res.json(installations);
+    try {
+        const installations = await InstallationService.list(req.query); // Retrieve a list of installations using the InstallationService, applying the filtering criteria specified in the request query parameters.
+        res.json(installations); // If the installations were retrieved successfully, send a JSON response containing the list of installations.
+    } catch (err) {
+        next(); // Pass errors to the next middleware handler
+    }
 }
 
 export const getInstallationDefault = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const accessLevel = req.user?.accessLevel!;
-        const id = req.user?.installationId?.id;
-        if(accessLevel > gbl.classicAdmin) return res.json({message: "You haven't an Installation of default, you can access to all of them beacuse you are admin"})
-        if(accessLevel < gbl.superAdmin && !id) return res.json({message: "your installation assigned may have been deleted or not exist"})
-        const found = await InstallationService.getByIdWithError(id!);
-        res.json(found);
+        const accessLevel = req.user?.accessLevel!; // Retrieve the access level of the authenticated user.
+        const id = req.user?.installationId?.id; // Retrieve the ID of the default installation for the authenticated user.
+        if (accessLevel > gbl.classicAdmin) return res.json({message: "You haven't an Installation of default, you can access to all of them beacuse you are admin"});
+        // Check if the user is not a super admin and does not have a default installation assigned.
+        if (accessLevel < gbl.superAdmin && !id) return res.json({message: "your installation assigned may have been deleted or not exist"});
+        const found = await InstallationService.getByIdWithError(id!); // Retrieve the default installation for the authenticated user using the InstallationService.
+        res.json(found); // If the default installation was retrieved successfully, send a JSON response containing the installation data.
     }catch(err){
-        next(err);
+        next(err); // Pass errors to the next middleware handler
     }
 }
 
 export const getOneInstallation = async (req: TypedRequest<any, ParsedQs, IDInstallationDTO>, res: Response, next: NextFunction) => {
     try{
-        const found = await InstallationService.getByIdWithError(req.params.id);
-        return res.json(found);
+        const found = await InstallationService.getByIdWithError(req.params.id); // Retrieve the specified installation using the InstallationService.
+        return res.json(found); // If the default installation was retrieved successfully, send a JSON response containing the installation data.
     }catch(err){
-        next(err);
+        next(err); // Pass errors to the next middleware handler
     }
 }
 
 export const updateInstallation = async (req: TypedRequest<UpdateDTO, ParsedQs, IDInstallationDTO>, res: Response, next: NextFunction) => {
     try{
-        if(!await hasKeyValuePairs(req.body)) return res.json({message: "Nothing to update"});
-        await InstallationService.update(req.params.id, req.body);
-        return res.status(200).json({message: `Installation ${req.params.id} changed with succesfully`});
+        if(!await hasKeyValuePairs(req.body)) return res.json({message: "Nothing to update"}); // Check if the request body contains any key-value pairs. If not, send a response indicating that there is nothing to update.
+        await InstallationService.update(req.params.id, req.body); // Update the specified installation using the InstallationService.
+        return res.status(200).json({message: `Installation ${req.params.id} changed with succesfully`}); // If the installation was updated successfully, send a 200 OK response indicating that the update was successful.
     }catch(err){
-        next(err);
+        next(err); // Pass errors to the next middleware handler
     }
 }
 
 export const deleteInstallation = async (req: TypedRequest<any, ParsedQs, IDInstallationDTO>, res: Response, next: NextFunction) => {
     try{
-        await InstallationService.delete(req.params.id);
-        return res.json({message: `Installation ${req.params.id} deleted`});
+        await InstallationService.delete(req.params.id); // Delete the specified installation using the InstallationService.
+        return res.json({message: `Installation ${req.params.id} deleted`}); //  If the installation was deleted successfully, send a JSON response indicating that the deletion was successful.
     }catch(err){
-        next(err)
+        next(err) // Pass errors to the next middleware handler
     }
 }

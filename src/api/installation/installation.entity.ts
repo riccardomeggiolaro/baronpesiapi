@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index } from "typeorm"
 
+// Create entity ORM to map the table installations
 @Entity("installations")
 export class InstallationORM extends BaseEntity {
     @PrimaryGeneratedColumn()

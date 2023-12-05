@@ -10,13 +10,19 @@ export function validate<T extends object>(type: (new() => T), origin: 'params')
 export function validate<T extends object>(type: (new() => T)): (req: TypedRequest<T, any, any>, res: Response, next: NextFunction) => Promise<void>;
 export function validate<T extends object> (type: (new() => T), origin: 'body' | 'query' | "params" = 'body'){
     return async (req: TypedRequest<any, ParsedQs, ParamsDictionary>, res: Response, next: NextFunction) => {
-        const data = plainToClass(type, req[origin]);
+        // Extract data from the specified origin (body, query, or params)
+        const data = plainToClass(type, req[origin]);      
+        // Validate the extracted data against the specified TypeScript class
         const errors = await classValidate(data, {whitelist: true, forbidNonWhitelisted: true});
-        if(errors.length){
+        // Check if any validation errors occurred
+        if (errors.length) {
+            // If errors exist, create a ValidationError and pass it to the next middleware handler
             next(new ValidationError(errors));
         } else {
-            req[origin] = data
+            // If validation is successful, store the validated data back in the request object
+            req[origin] = data;
+            // Proceed to the next middleware handler
             next();
         }
-    }
+    };      
 }

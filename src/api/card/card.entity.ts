@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, Index } from "typeorm";
 
+// Create entity ORM to map the table cards
 @Entity("cards")
 export class CardORM extends BaseEntity {
     @PrimaryGeneratedColumn()

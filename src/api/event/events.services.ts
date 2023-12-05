@@ -2,33 +2,13 @@ import { NotFoundError } from "../../errors/not-found";
 import { CardORM } from "../card/card.entity";
 import { InstallationORM } from "../installation/installation.entity";
 import { EventORM } from "./event.entity";
-import { EventDTO, FilterEventDTO, UpdateEventDTO } from "./events.dto";
+import { FilterEventDTO } from "./events.dto";
 import { SubjectORM } from "../subject/subject.entity";
 import { AppDataSource } from "../../app";
 
 export class EventService {
-    async add(newEvent: EventDTO): Promise<EventORM | null>{
-        const event = new EventORM();
-        event.installationId = newEvent.idInstallation;
-        event.progressive = newEvent.progressive;
-        event.dt_create = newEvent.dt_create;
-        event.note1 = newEvent.note1;
-        event.note2 = newEvent.note2;
-        event.weight1 = newEvent.weight1;
-        event.pid1 = newEvent.pid1;
-        event.weight2 = newEvent.weight2;
-        event.pid2 = newEvent.pid2;
-        event.netWeight = newEvent.netWeight;
-        event.cardCode = newEvent.cardCode;
-        const created = await event.save();
-        if(!created){
-            throw new NotFoundError();
-        }
-        const eventCreated = await this.getByIdAndInstallationWithError(created.id, created.installationId || null)
-        return eventCreated;
-    }
-
     async list(q: FilterEventDTO, takeLimit: boolean): Promise<EventORM[] | []>{
+        // Create query to find cards filtered
         const events = AppDataSource.getRepository(EventORM)
         .createQueryBuilder("events")
         .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
@@ -48,42 +28,30 @@ export class EventService {
         return result;
     }
 
-    async delete(id: number, installationId: number | null): Promise<void>{
-        const q = {
-            id: id
-        }
-        if(installationId) q["installationId"] = installationId
-        const deleted = await EventORM.delete(q)
-        if(deleted.affected === 0){
+    async delete(id: number): Promise<void>{
+        // Create query to delete event by id 
+        const deleted = await EventORM.delete({ id: id });
+        // Check if the deletion was successful
+        if (deleted.affected === 0) {
             throw new NotFoundError();
         }
     }
 
     async getByIdAndInstallationWithError(id: number, installationId: number | null): Promise<EventORM>{
+        // Create query to get event by id and installationId
         const event = EventORM
             .createQueryBuilder("events")
             .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
             .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
             .where("events.id = :id", { id: id });
+        // Check if installationId is different from null
         if(installationId !== null) event.andWhere("events.installationId = :installationId", { installationId: installationId })
         const result = await event.getOne()
+        // Check if event was found
         if(!result){
             throw new NotFoundError();
         }
-        console.log(result)
         return result;
-    }
-
-    async update(id: number, subject: UpdateEventDTO): Promise<void>{
-        const updated = await EventORM
-        .createQueryBuilder()
-        .update("events")
-        .set(subject)
-        .where("events.id = :id", { id })
-        .execute()
-        if(updated.affected === 0){
-            throw new NotFoundError();
-        }
     }
 }
 

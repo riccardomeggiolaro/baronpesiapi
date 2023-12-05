@@ -1,9 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index, JoinColumn } from "typeorm";
 import { CardORM } from "../card/card.entity";
 
-@Entity("events", {orderBy: {
-    dt_create: 'DESC'
-}})
+// Create entity ORM to map the table events
+@Entity("events", {orderBy: { dt_create: 'DESC' }})
 export class EventORM extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;

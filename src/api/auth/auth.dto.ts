@@ -12,12 +12,6 @@ export class SigninUserDTO {
   
     @IsString()
     @MinLength(8)
-    // @Matches(
-    //   new RegExp('^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$'),
-    //   {
-    //     message: 'password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and a special character'
-    //   }
-    // )
     password: string;
 
     @IsNumber()

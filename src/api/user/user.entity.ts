@@ -1,5 +1,6 @@
 import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, Index, JoinColumn } from "typeorm"
 
+// Create entity ORM to map the table users
 @Entity("users")
 export class UserORM extends BaseEntity {
     @PrimaryGeneratedColumn()

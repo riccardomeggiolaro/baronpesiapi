@@ -34,7 +34,7 @@ export const AppDataSource = new DataSource({
 
 // Set CORS options to define allowed origins, methods, and headers
 const corsOptions = {
-  origin: [String(process.env.ORIGIN1), String(process.env.PROCESS2)], // Optionally specify allowed origins (e.g., 'https://example.com')
+  // origin: [], // Optionally specify allowed origins (e.g., 'https://example.com')
   methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Allow GET, POST, PATCH, and DELETE methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow Content-Type and Authorization headers
 };

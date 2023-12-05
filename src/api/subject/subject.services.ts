@@ -33,7 +33,7 @@ export class SubjectService {
         const subjects = await SubjectORM.find({
             where: q
         });
-        // Check if some subject found
+        // Check if there is at least one subject
         if(subjects.length > 0){
             return subjects;
         }

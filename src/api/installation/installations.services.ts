@@ -33,7 +33,7 @@ export class InstallationService {
         const installations = await InstallationORM.find({
             where: q
         });
-        // Check if some installation found
+        // Check if there is at least one installation
         if(installations.length > 0){
             return installations;
         }

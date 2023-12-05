@@ -42,7 +42,7 @@ export const exportEvents = async (req: TypedRequest<any, FilterEventDTO>, res: 
             res.setHeader("Content-Disposition", 'inline; filename="data.pdf"');
             doc.end(); // Response with end of file pdf
         }else{
-            return res.json({message: "Type non supported"}) // Return if type pass is mot supported
+            return res.json({message: "Tipo non supportato"}) // Return if type pass is mot supported
         }
     }catch(err){
         next(err) // Pass errors to the next middleware handler

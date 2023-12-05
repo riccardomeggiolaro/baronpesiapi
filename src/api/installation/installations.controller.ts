@@ -27,9 +27,9 @@ export const getInstallationDefault = async (req: Request, res: Response, next: 
     try{
         const accessLevel = req.user?.accessLevel!; // Retrieve the access level of the authenticated user.
         const id = req.user?.installationId?.id; // Retrieve the ID of the default installation for the authenticated user.
-        if (accessLevel > gbl.classicAdmin) return res.json({message: "You haven't an Installation of default, you can access to all of them beacuse you are admin"});
+        if (accessLevel > gbl.classicAdmin) return res.json({message: "Non hai un'installazione assegnata, puoi accedere a tutte perchè sei un amministratore"});
         // Check if the user is not a super admin and does not have a default installation assigned.
-        if (accessLevel < gbl.superAdmin && !id) return res.json({message: "your installation assigned may have been deleted or not exist"});
+        if (accessLevel < gbl.superAdmin && !id) return res.json({message: "La tua installazione assegnata può essere stata eliminata o non esiste"});
         const found = await InstallationService.getByIdWithError(id!); // Retrieve the default installation for the authenticated user using the InstallationService.
         res.json(found); // If the default installation was retrieved successfully, send a JSON response containing the installation data.
     }catch(err){
@@ -48,9 +48,9 @@ export const getOneInstallation = async (req: TypedRequest<any, ParsedQs, IDInst
 
 export const updateInstallation = async (req: TypedRequest<UpdateDTO, ParsedQs, IDInstallationDTO>, res: Response, next: NextFunction) => {
     try{
-        if(!await hasKeyValuePairs(req.body)) return res.json({message: "Nothing to update"}); // Check if the request body contains any key-value pairs. If not, send a response indicating that there is nothing to update.
+        if(!await hasKeyValuePairs(req.body)) return res.json({message: "Niente da aggiornare"}); // Check if the request body contains any key-value pairs. If not, send a response indicating that there is nothing to update.
         await InstallationService.update(req.params.id, req.body); // Update the specified installation using the InstallationService.
-        return res.status(200).json({message: `Installation ${req.params.id} changed with succesfully`}); // If the installation was updated successfully, send a 200 OK response indicating that the update was successful.
+        return res.status(200).json({message: `Installazione ${req.params.id} modificata con successo`}); // If the installation was updated successfully, send a 200 OK response indicating that the update was successful.
     }catch(err){
         next(err); // Pass errors to the next middleware handler
     }
@@ -59,7 +59,7 @@ export const updateInstallation = async (req: TypedRequest<UpdateDTO, ParsedQs, 
 export const deleteInstallation = async (req: TypedRequest<any, ParsedQs, IDInstallationDTO>, res: Response, next: NextFunction) => {
     try{
         await InstallationService.delete(req.params.id); // Delete the specified installation using the InstallationService.
-        return res.json({message: `Installation ${req.params.id} deleted`}); //  If the installation was deleted successfully, send a JSON response indicating that the deletion was successful.
+        return res.json({message: `Installazione ${req.params.id} eliminata`}); //  If the installation was deleted successfully, send a JSON response indicating that the deletion was successful.
     }catch(err){
         next(err) // Pass errors to the next middleware handler
     }

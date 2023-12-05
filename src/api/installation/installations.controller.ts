@@ -29,7 +29,7 @@ export const getInstallationDefault = async (req: Request, res: Response, next: 
         const id = req.user?.installationId?.id; // Retrieve the ID of the default installation for the authenticated user.
         if (accessLevel > gbl.classicAdmin) return res.json({message: "Non hai un'installazione assegnata, puoi accedere a tutte perchè sei un amministratore"});
         // Check if the user is not a super admin and does not have a default installation assigned.
-        if (accessLevel < gbl.superAdmin && !id) return res.json({message: "La tua installazione assegnata può essere stata eliminata o non esiste"});
+        if (accessLevel < gbl.superAdmin && !id) return res.json({message: "La tua installazione assegnata potrebbe essere stata eliminata o non esiste"});
         const found = await InstallationService.getByIdWithError(id!); // Retrieve the default installation for the authenticated user using the InstallationService.
         res.json(found); // If the default installation was retrieved successfully, send a JSON response containing the installation data.
     }catch(err){

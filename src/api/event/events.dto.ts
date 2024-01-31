@@ -34,6 +34,16 @@ export class FilterEventDTO {
     plate: string
 
     @IsString()
+    @MaxLength(20)
+    @IsOptional()
+    material: string
+
+    @IsString()
+    @MaxLength(30)
+    @IsOptional()
+    note: string;
+
+    @IsString()
     @IsOptional()
     socialReason: string
 

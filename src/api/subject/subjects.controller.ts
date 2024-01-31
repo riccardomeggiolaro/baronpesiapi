@@ -24,21 +24,6 @@ export const listSubjects = async (req: TypedRequest<any, FilterSubjectDTO>, res
     }
 }
 
-export const getOneSubject = async (req: TypedRequest<any, ParsedQs, IDSubjectDTO>, res: Response, next: NextFunction) => {
-    try{
-        // Attempt to retrieve the subject with the specified ID using the SubjectService
-        const subject = await SubjectService.getByIdWithError(req.params.id); // Retrieve subject based on ID parameter
-        if (subject) {
-            return res.json(subject); // Send the retrieved subject object as JSON response if found
-        }else{
-            // Handle the case where the subject with the specified ID is not found
-            res.status(404).json({ message: "Subject not found" });
-        }
-    }catch(err){
-        next(err); // Pass the error to the Express error handler
-    }
-}
-
 export const updateSubject = async (req: TypedRequest<UpdateSubjectDTO, ParsedQs, IDSubjectDTO>, res: Response, next: NextFunction) => {
     try{
         // Check if there are any key-value pairs in the request body

@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import { TypedRequest } from "../typed-request.interface";
 import { classicAdmin, superAdmin } from "../../global";
-import { CardDTO, UpdateCardDTO } from "../../api/card/cards.dto";
+import { UpdateCardDTO } from "../../api/card/cards.dto";
 
 export function isToAssign(action: "update"): (req: TypedRequest<any, any, any>, res: Response, next: NextFunction) => Promise<Response>;
 export function isToAssign(action: "filters"): (req: TypedRequest<any, any, any>, res: Response, next: NextFunction) => Promise<Response>;

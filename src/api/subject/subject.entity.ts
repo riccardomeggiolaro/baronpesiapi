@@ -7,12 +7,12 @@ export class SubjectORM extends BaseEntity {
     id: number;
 
     @Index()
-    @Column({type: "varchar", length: 50})
+    @Column({type: "varchar", length: 50, nullable: false})
     socialReason: string;
 
-    @Column({type: "int", width: 9})
+    @Column({type: "int", width: 9, nullable: true})
     telephoneNumber: number;
 
-    @Column({type: "varchar", length: 30})
-    CFPIVA: string
+    @Column({type: "varchar", nullable: true})
+    CFPIVA: string;
 }

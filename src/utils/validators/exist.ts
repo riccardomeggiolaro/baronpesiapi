@@ -2,9 +2,10 @@ import { ValidationArguments, ValidationOptions, registerDecorator } from "class
 import UserService from "../../api/user/user.services";
 import InstallationService from "../../api/installation/installations.services";
 import SubjectService from "../../api/subject/subject.services";
+import MatrialService from "../../api/material/material.services";
 import CardService from "../../api/card/cards.services";
 
-export function Exist(property: "username" | "installation" | "subject" | "card" | "cardCode", validationOptions?: ValidationOptions) {
+export function Exist(property: "username" | "installation" | "subject" | "card" | "cardCode" | "material", validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
       // Register a custom validation decorator named 'isExist'
       registerDecorator({
@@ -27,6 +28,10 @@ export function Exist(property: "username" | "installation" | "subject" | "card"
             }
             if(property === "subject") {
               if(await SubjectService.getById(value)) return true; // Check if the subject exist
+              return false;
+            }
+            if(property === "material") {
+              if(await MatrialService.getById(value)) return true; // Check if the subject exist
               return false;
             }
             if(property === "card") {

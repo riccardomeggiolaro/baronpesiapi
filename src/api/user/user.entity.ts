@@ -7,16 +7,16 @@ export class UserORM extends BaseEntity {
     id: number
 
     @Index()
-    @Column({type: "varchar", length: 50})
+    @Column({type: "varchar", length: 50, nullable: false})
     username: string;
 
-    @Column({type: "varchar", length: 255})
+    @Column({type: "varchar", length: 255, nullable: false})
     hashedPassword: string;
 
-    @Column({type: "int", width: 11})
+    @Column({type: "int", width: 11, nullable: false})
     accessLevel: number;
 
-    @Column({type: "tinyint", default: 1})
+    @Column({type: "tinyint", default: 1, nullable: false})
     able: boolean;
 
     @Column({type: "datetime", nullable: true})

@@ -1,37 +1,23 @@
 import { SubjectORM } from "../subject/subject.entity";
 import { NotFoundError } from "../../errors/not-found";
-import { CardDTO, FilterCardDTO } from "./cards.dto";
+import { FilterCardDTO } from "./cards.dto";
 import { CardORM } from "./card.entity";
 import { InstallationORM } from "../installation/installation.entity";
+import { MaterialORM } from "../material/material.entity";
 
 export class CardService {    
-    async add(newCard: CardDTO): Promise<CardORM | null>{
-        const card = new CardORM(); // Create new card
-        card.cardCode = newCard.cardCode;
-        card.numberCard = newCard.numberCard;
-        card.vehicle = newCard.vehicle;
-        card.plate = newCard.plate;
-        card.tare = newCard.tare || 0;
-        card.subjectId = newCard.idSubject;
-        card.installationId = newCard.idInstallation;
-        const created = await card.save(); // Save new card
-        // Check if card was created
-        if(!created){
-            throw new NotFoundError();
-        }
-        const cardCreated = await this.getByCardCodeWithError(created.cardCode) // Check if card was created
-        return cardCreated;
-    }
-
     async list(q: FilterCardDTO): Promise<CardORM[] | []>{
         // Create query to find cards filtered
         const cards = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             if(q.numberCard) cards.where("cards.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
             if(q.vehicle) cards.andWhere("cards.vehicle LIKE :vehicle", { vehicle: `${q.vehicle}%` })
             if(q.plate) cards.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
+            if(q.note) cards.andWhere("cards.note LIKE :note", { note: `${q.note}%` } )
+            if(q.materialDescription) cards.andWhere("materials.description LIKE :description", { description: `${q.materialDescription}%` })
             if(q.socialReason) cards.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
             if(q.idInstallation) cards.andWhere("cards.installationId = :idInstallation", { idInstallation: q.idInstallation })
         const result = await cards.getMany()
@@ -51,6 +37,7 @@ export class CardService {
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.id = :id", { id: id })
             .getOne()
@@ -62,6 +49,7 @@ export class CardService {
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.id = :id", { id: id });
             if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
@@ -78,6 +66,7 @@ export class CardService {
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.id = :id", { id: id });
             if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
@@ -90,6 +79,7 @@ export class CardService {
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.cardCode = :cardCode", { cardCode: cardCode })
             .getOne()
@@ -101,6 +91,7 @@ export class CardService {
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.cardCode = :cardCode", { cardCode: cardCode })
             .getOne()
@@ -116,6 +107,7 @@ export class CardService {
         const card = CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.cardCode = :cardCode", { cardCode: cardCode });
             if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
@@ -128,6 +120,7 @@ export class CardService {
         const card = await CardORM
             .createQueryBuilder("cards")
             .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
+            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
             .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
             .where("cards.numberCard = :numberCard", { numberCard: numberCard })
             .getOne()

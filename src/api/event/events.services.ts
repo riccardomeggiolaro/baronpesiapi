@@ -1,9 +1,7 @@
 import { NotFoundError } from "../../errors/not-found";
-import { CardORM } from "../card/card.entity";
 import { InstallationORM } from "../installation/installation.entity";
 import { EventORM } from "./event.entity";
 import { FilterEventDTO } from "./events.dto";
-import { SubjectORM } from "../subject/subject.entity";
 import { AppDataSource } from "../../app";
 
 export class EventService {
@@ -12,17 +10,17 @@ export class EventService {
         const events = AppDataSource.getRepository(EventORM)
         .createQueryBuilder("events")
         .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
-        .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
-        .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
         if(takeLimit) events.take(100)
         if(!takeLimit) events.take(5000)
         if(q.dtMin && !q.dtMax) events.where("events.dt_create > :dtMin", { dtMin: q.dtMin })
         if(!q.dtMin && q.dtMax) events.where("events.dt_create < :dtMax", { dtMax: q.dtMax })
         if(q.dtMin && q.dtMax) events.where("events.dt_create BETWEEN :dtMin AND :dtMax", { dtMin: q.dtMin, dtMax: q.dtMax })
-        if(q.cardCode) events.andWhere("cards.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
-        if(q.numberCard) events.andWhere("cards.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
-        if(q.plate) events.andWhere("cards.plate LIKE :plate", { plate: `${q.plate}%` })
-        if(q.socialReason) events.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
+        if(q.cardCode) events.andWhere("events.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
+        if(q.numberCard) events.andWhere("events.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
+        if(q.plate) events.andWhere("events.plate LIKE :plate", { plate: `${q.plate}%` })
+        if(q.material) events.andWhere("events.material LIKE :material", { material: `${q.material}%` })
+        if(q.note) events.andWhere("events.note LIKE :note", { note: `${q.note}%` } )
+        if(q.socialReason) events.andWhere("events.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
         if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })
         const result = await events.getMany()
         return result;
@@ -42,7 +40,6 @@ export class EventService {
         const event = EventORM
             .createQueryBuilder("events")
             .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")
-            .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
             .where("events.id = :id", { id: id });
         // Check if installationId is different from null
         if(installationId !== null) event.andWhere("events.installationId = :installationId", { installationId: installationId })

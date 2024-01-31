@@ -7,7 +7,7 @@ export interface iUser { // Define the IUser interface for user data
   username?: string; // User's username
   hashedPassword?: string; // User's hashed password
   accessLevel?: number; // User's access level
-  enabled?: boolean; // Flag indicating whether the user is enabled or disabled
+  able?: boolean; // Flag indicating whether the user is enabled or disabled
   lastAccess?: Date; // Timestamp of the user's last access
   installationId?: Installation | null; // User's assigned installation or null
 }

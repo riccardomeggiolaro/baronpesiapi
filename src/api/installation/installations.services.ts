@@ -1,7 +1,6 @@
 import { NotFoundError } from "../../errors/not-found";
 import { FilterInstallationDTO, InstallationDTO } from "./installations.dto";
 import { InstallationORM } from "./installation.entity";
-import { Like } from "typeorm";
 
 export class InstallationService {
     async add(newInstallation: InstallationDTO): Promise<InstallationORM | null>{
@@ -18,26 +17,13 @@ export class InstallationService {
     }
 
     async list(filter: FilterInstallationDTO): Promise<InstallationORM[] | []>{
-        let q: object[] = [];
-        let i = 0;
-        // For each key value pair push a new object containg them into q
-        Object.keys(filter).forEach(key => {
-            if(i === 0){
-                q.push({[key]: Like(`%${filter[key]}%`)});
-            }else{
-                q.push({[key]: Like(`%${filter[key]}%`)});
-            }
-            i++;
-        });
-        // Create query to find installations filtered
-        const installations = await InstallationORM.find({
-            where: q
-        });
-        // Check if there is at least one installation
-        if(installations.length > 0){
-            return installations;
-        }
-        return [];
+        const installations = InstallationORM
+            .createQueryBuilder("installations")
+            if(filter.installationCode) installations.where("installations.installationCode LIKE :installationCode", { installationCode: `${filter.installationCode}%` })
+            if(filter.description) installations.andWhere("installations.description LIKE :description", { description: `${filter.description}%` })
+            if(filter.imei) installations.andWhere("installations.imei LIKE :imei", { imei: `${filter.imei}%` })
+            const result = await installations.getMany()
+        return result;
     }
 
     async delete(id: number): Promise<void>{
@@ -68,6 +54,12 @@ export class InstallationService {
     async getByInstallationCode(code: string): Promise<InstallationORM | null>{
         // Create query to get installation by installation code
         const installation = await InstallationORM.findOneBy({installationCode: code});
+        return installation;
+    }
+
+    async getByInstallationDescription(description: string): Promise<InstallationORM | null>{
+        // Create query to get installation by installation description
+        const installation = await InstallationORM.findOneBy({description: description});
         return installation;
     }
 

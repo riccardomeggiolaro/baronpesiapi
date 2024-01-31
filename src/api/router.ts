@@ -5,6 +5,7 @@ import routerInstallation from "./installation/installations.router";
 import routerCard from "./card/cards.router";
 import routerSubject from "./subject/subjects.router";
 import routerEvent from "./event/events.router";
+import routerMaterial from "./material/material.router";
 
 // Mount the secondary router for all of different path
 const router = Router();
@@ -15,5 +16,6 @@ router.use("/subject", routerSubject); // Import the third router that contains 
 router.use("/card", routerCard); // Import the third router that contains all end points for the '/card' path
 router.use("/installation", routerInstallation); // Import the third router that contains all end points for the '/installation' path
 router.use("/event", routerEvent) // Import the third router that contains all end points for the '/event' path
+router.use("/material", routerMaterial)
 
 export default router;

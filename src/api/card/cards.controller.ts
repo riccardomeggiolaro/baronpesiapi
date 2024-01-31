@@ -1,19 +1,9 @@
 import { Response, NextFunction } from "express"
 import { ParsedQs, TypedRequest } from "../../utils/typed-request.interface";
-import { CardDTO, FilterCardDTO, IDCardDTO, UpdateCardDTO } from "./cards.dto";
+import { FilterCardDTO, IDCardDTO, UpdateCardDTO } from "./cards.dto";
 import CardService from "./cards.services";
 import { hasKeyValuePairs } from "../../utils/has-values-object";
 
-export const addCard = async (req: TypedRequest<CardDTO>, res: Response, next: NextFunction) => {
-    try{
-        const cardData = req.body; // Retrieve the card data from the request body
-        const newCard = await CardService.add(cardData); // Add the new card using CardService.add
-        return res.status(201).json(newCard); // Return a successful response with the newly created card
-    }catch(err){
-        next(err); // Pass errors to the next middleware handler
-    }
-};
-  
 export const listCards = async (req: TypedRequest<any, FilterCardDTO>, res: Response, next: NextFunction) => {
     try{
         const filterParams: FilterCardDTO = req.query; // Extract filter parameters from the request query
@@ -40,14 +30,5 @@ export const updateCard = async (req: TypedRequest<UpdateCardDTO, ParsedQs, IDCa
         return res.status(200).json({message: `Carta ${req.params.id} modificata con successo`}); // Return a successful response
     }catch(err){
         next(err); // Pass errors to the next middleware handler
-    }
-}
-
-export const deleteCard = async (req: TypedRequest<any, ParsedQs, IDCardDTO>, res: Response, next: NextFunction) => {
-    try{
-        await CardService.delete(req.params.id); // Delete card by id and installationId if exist
-        return res.json({message: `Carta ${req.params.id} eliminata`}); // Return a successful response
-    }catch(err){
-        next(err) // Pass errors to the next middleware handler
     }
 }

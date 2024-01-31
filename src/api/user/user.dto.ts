@@ -16,7 +16,7 @@ export class FilterUserDTO {
     @IsNumber()
     @Type(() => Number)
     @IsOptional()
-    idInstallation: number;
+    installationId: number;
 }
 
 export class UsernameDTO {

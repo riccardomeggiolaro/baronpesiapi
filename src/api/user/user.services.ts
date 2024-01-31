@@ -35,7 +35,7 @@ export class UserService {
             .createQueryBuilder("users")
             .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id");
             if(filter.username) users.where("users.username LIKE :username", { username: `${filter.username}%` })
-            if(filter.idInstallation) users.andWhere("users.installationId = :installationId", { installationId: filter.idInstallation })
+            if(filter.installationId) users.andWhere("users.installationId = :installationId", { installationId: filter.installationId })
         const result = await users.getMany()
         if(!users){
             return [];

@@ -1,7 +1,7 @@
 import { SubjectORM } from "./subject.entity";
 import { NotFoundError } from "../../errors/not-found";
-import { SubjectDTO, UpdateSubjectDTO } from "./subjects.dto";
-import { And, Like } from "typeorm";
+import { FilterSubjectDTO, SubjectDTO } from "./subjects.dto";
+import { InstallationORM } from "../installation/installation.entity";
 
 export class SubjectService {
     async add(newSubject: SubjectDTO): Promise<SubjectORM | null>{
@@ -17,32 +17,22 @@ export class SubjectService {
         return created;
     }
 
-    async list(filter: UpdateSubjectDTO): Promise<SubjectORM[] | []>{
-        let q: object[] = [];
-        let i = 0;
-        // For each key value pair push a new object containg them into q
-        Object.keys(filter).forEach(key => {
-            if(i === 0){
-                q.push({[key]: Like(`%${filter[key]}%`)});
-            }else{
-                q.push({[key]: And(Like(`%${filter[key]}%`))});
-            }
-            i++;
-        });
-        // Create query to find cards filtered
-        const subjects = await SubjectORM.find({
-            where: q
-        });
-        // Check if there is at least one subject
-        if(subjects.length > 0){
-            return subjects;
-        }
-        return [];
+    async list(filter: FilterSubjectDTO): Promise<SubjectORM[] | []>{
+        const subjects = SubjectORM
+            .createQueryBuilder("subjects")
+            if(filter.socialReason) subjects.where("subjects.socialReason LIKE :socialReason", { socialReason: `${filter.socialReason}%` })
+            if(filter.telephoneNumber) subjects.andWhere("subjects.telephoneNumber LIKE :telephoneNumber", { telephoneNumber: `${filter.telephoneNumber}%` })
+            if(filter.CFPIVA) subjects.andWhere("subjects.CFPIVA LIKE :CFPIVA", { CFPIVA: `${filter.CFPIVA}%` })
+        const result = await subjects.getMany()
+        return result;
     }
 
     async delete(id: number): Promise<void>{
         // Create query to delete subject by id
-        const deleted = await SubjectORM.delete({id: id})
+        const q = {
+            id: id
+        }
+        const deleted = await SubjectORM.delete(q)
         // Check if subject was deleted
         if(deleted.affected === 0){
             throw new NotFoundError();
@@ -73,14 +63,14 @@ export class SubjectService {
 
     async update(id: number, subject: object): Promise<void>{
         // Create query to update the subject by id and passing an object with parameters contains value to update
-        const updated = await SubjectORM
+        const updated = SubjectORM
         .createQueryBuilder()
         .update("subjects")
         .set(subject)
         .where("id = :id", { id: id })
-        .execute()
+        const result = await updated.execute()
         // Check if subject was updated
-        if(updated.affected === 0){
+        if(result.affected === 0){
             throw new NotFoundError();
         }
     }

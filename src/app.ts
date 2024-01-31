@@ -7,10 +7,11 @@ import { DataSource } from "typeorm";
 import { errorHandlers } from "./errors";
 import { UserORM } from "./api/user/user.entity";
 import { InstallationORM } from "./api/installation/installation.entity";
-import { SubjectORM } from "./api/subject/subject.entity";
 import { CardORM } from "./api/card/card.entity";
 import { EventORM } from "./api/event/event.entity";
 import { toNumber } from "lodash";
+import { SubjectORM } from "./api/subject/subject.entity";
+import { MaterialORM } from "./api/material/material.entity";
 // a middleware that enhances security by adding Content Security Policy (CSP) headers
 var helmet = require("helmet"); 
 // a middleware that compresses responses to reduce their size
@@ -27,8 +28,8 @@ export const AppDataSource = new DataSource({
   username: process.env.USERNAME_DB, // Set the database username using the USERNAME_DB environment variable
   password: process.env.PASSWORD_DB, // Set the database password using the PASSWORD_DB environment variable
   database: process.env.NAME_DB, // Set the database name using the NAME_DB environment variable
-  entities: [UserORM, SubjectORM, CardORM, InstallationORM, EventORM], // Define the entities to be managed by TypeORM
-  synchronize: false, // Disable automatic synchronization of the schema with the database
+  entities: [UserORM, SubjectORM, CardORM, InstallationORM, EventORM, MaterialORM], // Define the entities to be managed by TypeORM
+  synchronize: true, // Disable automatic synchronization of the schema with the database
   logging: false, // Disable logging by default
 });
 

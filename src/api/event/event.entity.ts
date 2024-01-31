@@ -7,7 +7,7 @@ export class EventORM extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: "int", nullable: true})
+    @Column({type: "int"})
     installationId: number | null;
 
     @Index()
@@ -20,12 +20,6 @@ export class EventORM extends BaseEntity {
 
     @Column({type: "bigint"})
     progressive: number;
-
-    @Column({type: "varchar", length: 50})
-    note1: string;
-
-    @Column({type: "varchar", length: 50})
-    note2: string;
 
     @Column({type: "bigint", width: 20})
     weight1: number;
@@ -42,12 +36,27 @@ export class EventORM extends BaseEntity {
     @Column({type: "bigint", width: 20})
     netWeight: number;
 
-    @Column({type: "char", length: 25})
+    @Column({type: "varchar", length: 30})
+    cardCode: string | CardORM;
+
+    @Column({type: "char", length: 4})
+    numberCard: string;
+
+    @Column({type: "varchar", length: 20})
+    vehicle: string;
+
+    @Column({type: "varchar", length: 10})
+    plate: string;
+
+    @Column({type: "varchar", length: 20})
     material: string;
 
-    @Column({type: "varchar", length: 30, nullable: true})
-    @JoinColumn({ name: 'cardCode' })
-    cardCode: string | CardORM;
+    @Column({type: "varchar", length: 30})
+    note: string;
+
+    @Index()
+    @Column({type: "varchar", length: 50})
+    socialReason: string;
 
     @Column({type: "bigint", width: 20})
     rawid: number;

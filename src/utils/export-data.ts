@@ -7,20 +7,19 @@ const exportData = (data) => {
   const onlyNameAndSymbolArr: Partial<any>[] = data.map(x => {
     const k = x as any;
     return {
+      "Progr": k.progressive,
       "Data": new Date(k.dt_create).toLocaleString(),
-      "Numero carta": k.cardCode?.numberCard,
-      "Targa": k.cardCode?.plate,
-      "Ragione sociale": k.cardCode?.subjectId?.socialReason,
+      "Numero carta": k.numberCard,
+      "Veicolo": k.vehicle,
+      "Targa": k.plate,
+      "Ragione sociale": k.socialReason,
       "Pid1": k.pid1,
       "Pid2": k.pid2,
       "Peso1": k.weight1,
       "Peso2": k.weight2,
       "Netto": k.netWeight,
       "Materiale": k.material,
-      "Codice installazione": k.installationId?.installationCode,
-      "Descrizione installazione": k.installationId?.description,
-      "Note1": k.note1,
-      "Note2": k.note2
+      "Installazione": k.installationId?.description,
     }
   })
   return onlyNameAndSymbolArr;
@@ -53,25 +52,24 @@ export const exportPdf = (data) => {
   const pesate: any[] = data.map(x => {
     const k = x as any;
     return [
+      k.progressive,
       new Date(k.dt_create).toLocaleString(),
-      k.cardCode?.numberCard || "",
-      k.cardCode?.plate || "",
-      k.cardCode?.subjectId?.socialReason || "",
+      k.numberCard || "",
+      k.vehicle,
+      k.plate || "",
+      k.socialReason || "",
       (k.pid1 || "") + "\n" + (x.pid2 || ""),
       k.weight1 || "",
       k.weight2 || "",
       k.netWeight || "",
       k.material || "",
-      k.installationId?.installationCode || "",
       k.installationId?.description || "",
-      k.note1 || "",
-      k.note2 || ""
     ]
   })
   // Create an object with headers and data changed
   const table = { 
     title: '',
-    headers: ["Data", "Numero \nCarta", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Codice \nInstallazione", "Descrizione \ninstallazione", "Note 1", "Note 2"],
+    headers: ["Progr", "Data", "Numero \nCarta", "Veicolo", "Targa", "Ragione Sociale", "Pid 1\nPid 2", "Peso 1", "Peso 2", "Peso Netto", "Materiale", "Installazione"],
     datas: [],
     rows: pesate
   };

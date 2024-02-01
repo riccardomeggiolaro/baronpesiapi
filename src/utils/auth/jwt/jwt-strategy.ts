@@ -1,9 +1,8 @@
 import passport from "passport";
-import { UserORM } from "../../../api/user/user.entity";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { toPlainObject } from "lodash";
 import * as gbl from "../../../global";
-import { InstallationORM } from "../../../api/installation/installation.entity";
+import UserService from "../../../api/user/user.services";
 
 // Define Passport JWT strategy for user authentication (jwt_user)
 passport.use(
@@ -19,10 +18,7 @@ passport.use(
     async (token, done) => {
       try {
         // Retrieve user data from the database using the token's ID
-        const user = await UserORM.createQueryBuilder("users")
-          .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
-          .where("users.id = :id", { id: token.id })
-          .getOne();
+        const user = await UserService.getUserById(token.id);
 
         // Check if the user needs installation assigned but doesn't have it
         if (user?.accessLevel! < gbl.classicAdmin && !user?.installationId){
@@ -62,10 +58,7 @@ passport.use(
       async (token, done) => {
         try {
           // Retrieve user data from the database using the token's ID
-          const user = await UserORM.createQueryBuilder("users")
-            .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
-            .where("users.id = :id", { id: token.id })
-            .getOne();
+          const user = await UserService.getUserById(token.id);
   
           // Check if the user exists, has classic admin access level, and is able to log in
           if (user && user.accessLevel >= gbl.classicAdmin && user.able) {
@@ -94,10 +87,7 @@ passport.use("jwt_super_admin", new JwtStrategy(
     },
     async (token, done) => {
       try {
-        const user = await UserORM.createQueryBuilder("users") // Retrieve user data from the database using the token's ID
-          .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
-          .where("users.id = :id", { id: token.id })
-          .getOne();
+        const user = await UserService.getUserById(token.id);
   
         if (user && user.accessLevel === gbl.superAdmin && user.able) { // Check if the user exists, has super admin access level, and is able to log in
           const data = toPlainObject(user); // Convert UserORM object to a plain object

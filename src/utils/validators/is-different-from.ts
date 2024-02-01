@@ -22,9 +22,3 @@ export function IsDifferentFrom(property: string, validationOptions?: Validation
     });
   };
 }
-
-// FOR TO USE
-// @IsGreateThan('[name_value]', { message: '[current_value] value must to be greater then [name_value]' })
-
-//[name_value] = name of other params of current class to validate
-//[current_value] = name of current params of current class to validate

@@ -8,6 +8,7 @@ export class EventORM extends BaseEntity {
     id: number;
 
     @Column({type: "int"})
+    @JoinColumn({ name: 'installationId' })
     installationId: number | null;
 
     @Index()
@@ -39,15 +40,18 @@ export class EventORM extends BaseEntity {
     @Column({type: "varchar", length: 30})
     cardCode: string | CardORM;
 
+    @Index()
     @Column({type: "char", length: 4})
     numberCard: string;
 
     @Column({type: "varchar", length: 20})
     vehicle: string;
 
+    @Index()
     @Column({type: "varchar", length: 10})
     plate: string;
 
+    @Index()
     @Column({type: "varchar", length: 20})
     material: string;
 
@@ -59,5 +63,6 @@ export class EventORM extends BaseEntity {
     socialReason: string;
 
     @Column({type: "bigint", width: 20})
+    @JoinColumn({ name: 'rawId' })
     rawid: number;
 }

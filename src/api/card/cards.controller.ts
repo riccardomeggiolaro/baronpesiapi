@@ -26,7 +26,7 @@ export const getOneCard = async (req: TypedRequest<any, ParsedQs, IDCardDTO>, re
 export const updateCard = async (req: TypedRequest<UpdateCardDTO, ParsedQs, IDCardDTO>, res: Response, next: NextFunction) => {
     try{
         if(!await hasKeyValuePairs(req.body)) return res.json({message: "Niente da aggiornare"}); // Return if there isn't anything to update
-        await CardService.update(req.params.id, req.user?.installationId?.id || null, req.body); // Update the card by id and installationId if exist
+        await CardService.update(req.params.id, req.body); // Update the card by id and installationId if exist
         return res.status(200).json({message: `Carta ${req.params.id} modificata con successo`}); // Return a successful response
     }catch(err){
         next(err); // Pass errors to the next middleware handler

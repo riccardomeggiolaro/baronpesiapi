@@ -18,10 +18,10 @@ export class EventService {
         if(q.cardCode) events.andWhere("events.cardCode LIKE :cardCode", { cardCode: `${q.cardCode}%` })
         if(q.numberCard) events.andWhere("events.numberCard LIKE :numberCard", { numberCard: `${q.numberCard}%` })
         if(q.plate) events.andWhere("events.plate LIKE :plate", { plate: `${q.plate}%` })
-        if(q.material) events.andWhere("events.material LIKE :material", { material: `${q.material}%` })
+        if(q.materialDescription) events.andWhere("events.material LIKE :material", { material: `${q.materialDescription}%` })
         if(q.note) events.andWhere("events.note LIKE :note", { note: `${q.note}%` } )
         if(q.socialReason) events.andWhere("events.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
-        if(q.idInstallation) events.andWhere("events.installationId = :installationId", { installationId: q.idInstallation })
+        if(q.installationId) events.andWhere("events.installationId = :installationId", { installationId: q.installationId })
         const result = await events.getMany()
         return result;
     }

@@ -39,6 +39,11 @@ export const signin = async (req: TypedRequest<SigninUserDTO>, res: Response, ne
 
 export const signinFirstUser = async (req: TypedRequest<FirstUserDTO>, res: Response, next: NextFunction) => {
     try{
+        const user = await UserService.getOneUser();
+        if (user != null) {
+            // If there is already a user, return an error message indicating that the first user has already been created.
+            return res.status(400).json({ message: `Primo utente già creato` }); // Return an error message.
+        }
         // Create a new user object with the superAdmin access level
         const userData: User = {
             accessLevel: superAdmin

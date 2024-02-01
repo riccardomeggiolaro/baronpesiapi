@@ -2,7 +2,6 @@ import { ValidationArguments, ValidationOptions, registerDecorator } from "class
 import UserService from "../../api/user/user.services";
 import InstallationService from "../../api/installation/installations.services";
 import SubjectService from "../../api/subject/subject.services";
-import CardService from "../../api/card/cards.services";
 import MaterialService from "../../api/material/material.services";
 
 export function JustExist(property: "username" | "installationCode" | "installationDescription" | "subject" | "card" | "numberCard" | "material", validationOptions?: ValidationOptions) {
@@ -28,12 +27,6 @@ export function JustExist(property: "username" | "installationCode" | "installat
               return true;
             }else if(property === "subject") {
               if(await SubjectService.getBySocialReason(value)) return false; // Check if the subject just exist
-              return true;
-            }else if(property === "card"){
-              if(await CardService.getByCardCode(value)) return false; // Check if the card just exist by id
-              return true;
-            }else if(property === "numberCard"){
-              if (await CardService.getByNumberCard(value)) return false; // Check if the card just exist by cardCode
               return true;
             }else if(property === "material"){
               if (await MaterialService.getByDescription(value)) return false;

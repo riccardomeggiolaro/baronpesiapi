@@ -1,7 +1,6 @@
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
 import { JustExist } from "../../utils/validators/just-exist";
-import { NumberLength } from "../../utils/validators/number-length";
 
 export class SubjectDTO {
     @IsString()
@@ -11,7 +10,8 @@ export class SubjectDTO {
 
     @IsInt()
     @Type(() => Number)
-    @NumberLength(9, { message: "Il numero di telefono deve avere massimo 9 numeri" })
+    @Min(100000, {message: "Il recapito telefonico deve avere tra i 6 e 10 numeri"})
+    @Max(9999999999, {message: "Il recapito telefonico deve avere tra i 6 e 10 numeri"})
     @IsOptional()
     telephoneNumber: number;
 
@@ -53,7 +53,8 @@ export class UpdateSubjectDTO {
     @IsInt()
     @IsOptional()
     @Type(() => Number)
-    @NumberLength(9, { message: "Il numero di telefono deve avere massimo 9 numeri" })
+    @Min(100000, {message: "Il recapito telefonico deve avere tra i 6 e 10 numeri"})
+    @Max(9999999999, {message: "Il recapito telefonico deve avere tra i 6 e 10 numeri"})
     telephoneNumber: number;
 
     @IsString()

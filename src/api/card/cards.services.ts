@@ -19,7 +19,7 @@ export class CardService {
             if(q.note) cards.andWhere("cards.note LIKE :note", { note: `${q.note}%` } )
             if(q.materialDescription) cards.andWhere("materials.description LIKE :description", { description: `${q.materialDescription}%` })
             if(q.socialReason) cards.andWhere("subjects.socialReason LIKE :socialReason", { socialReason: `${q.socialReason}%` })
-            if(q.idInstallation) cards.andWhere("cards.installationId = :idInstallation", { idInstallation: q.idInstallation })
+            if(q.installationId) cards.andWhere("cards.installationId = :idInstallation", { idInstallation: q.installationId })
         const result = await cards.getMany()
         return result;
     }
@@ -86,35 +86,6 @@ export class CardService {
         return card;
     }
 
-    async getByCardCodeWithError(cardCode: string): Promise<CardORM>{
-        // Create query to get the card by cardCode
-        const card = await CardORM
-            .createQueryBuilder("cards")
-            .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
-            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
-            .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
-            .where("cards.cardCode = :cardCode", { cardCode: cardCode })
-            .getOne()
-        // Check if the card found
-        if(!card){
-            throw new NotFoundError()
-        }
-        return card;
-    }
-
-    async getByCardCodeAndInstallation(cardCode: string, installationId: number | null): Promise<CardORM | null>{
-        // Create query to get the card by cardCode and installation
-        const card = CardORM
-            .createQueryBuilder("cards")
-            .leftJoinAndMapOne("cards.subjectId", SubjectORM, "subjects", "cards.subjectId = subjects.id")
-            .leftJoinAndMapOne("cards.materialId", MaterialORM, "materials", "cards.materialId = materials.id")
-            .leftJoinAndMapOne("cards.installationId", InstallationORM, "installations", "cards.installationId = installations.id")
-            .where("cards.cardCode = :cardCode", { cardCode: cardCode });
-            if(installationId !== null) card.andWhere("cards.installationId = :installationId", { installationId: installationId })
-        const result = await card.getOne()
-        return result
-    }
-
     async getByNumberCard(numberCard: string): Promise<CardORM | null>{
         // Create query to get the card by numerCard
         const card = await CardORM
@@ -127,7 +98,7 @@ export class CardService {
         return card;
     }
 
-    async update(id: number, installationId: number | null, card: any): Promise<void>{
+    async update(id: number, card: any): Promise<void>{
         // Create query to update the card by id and passing an object with parameters contains value to update
         const updated = CardORM
         .createQueryBuilder()
@@ -135,9 +106,6 @@ export class CardService {
         .set(card)
         .where("id = :id", { id: id })
         // If installationId is different from null add parameter
-        if(installationId !== null){
-            updated.andWhere("installationId = :installationId", { installationId: installationId })
-        }
         const cardUpdated = await updated.execute()
         // Check if the card was updated
         if(cardUpdated.affected === 0){

@@ -3,9 +3,8 @@ import UserService from "../../api/user/user.services";
 import InstallationService from "../../api/installation/installations.services";
 import SubjectService from "../../api/subject/subject.services";
 import MatrialService from "../../api/material/material.services";
-import CardService from "../../api/card/cards.services";
 
-export function Exist(property: "username" | "installation" | "subject" | "card" | "cardCode" | "material", validationOptions?: ValidationOptions) {
+export function Exist(property: "username" | "installation" | "subject" | "material", validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
       // Register a custom validation decorator named 'isExist'
       registerDecorator({
@@ -32,14 +31,6 @@ export function Exist(property: "username" | "installation" | "subject" | "card"
             }
             if(property === "material") {
               if(await MatrialService.getById(value)) return true; // Check if the subject exist
-              return false;
-            }
-            if(property === "card") {
-              if(await CardService.getById(value)) return true; // Check if the card exist by id
-              return false;
-            }
-            if(property === "cardCode") {
-              if(await CardService.getByCardCode(value)) return true; // Check if the card exist by cardCode
               return false;
             }
             return false;

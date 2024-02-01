@@ -5,6 +5,7 @@ import { FilterUserDTO } from "./user.dto";
 import { NotFoundError } from "../../errors/not-found";
 import { InstallationORM } from "../installation/installation.entity";
 import { superAdmin } from "../../global";
+import { use } from "passport";
 
 export class UserService {
     async hashPAssword(password: string) {
@@ -41,6 +42,14 @@ export class UserService {
             return [];
         }
         return result;
+    }
+
+    async getUserById(id: number): Promise<UserORM | null>{
+        const user = await UserORM.createQueryBuilder("users")
+            .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
+            .where("users.id = :id", { id: id })
+            .getOne()
+        return user;      
     }
 
     async getUserByUsername(username: string): Promise<UserORM | null> {

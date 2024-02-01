@@ -1,10 +1,8 @@
 import passport from "passport"; // Import Passport for authentication
 import { Strategy as LocalStrategy } from "passport-local"; // Import LocalStrategy for username and password authentication
-import { UserORM } from "../../../api/user/user.entity"; // Import UserORM entity for accessing user data
 import * as bcrypt from "bcrypt"; // Import bcrypt for password hashing and comparison
 import { toPlainObject } from "lodash"; // Import toPlainObject function from Lodash for converting UserORM object to plain object
 import UserService from "../../../api/user/user.services"; // Import UserService for updating user last access timestamp
-import { InstallationORM } from "../../../api/installation/installation.entity"; // Import InstallationORM entity for accessing installation data
 
 passport.use(new LocalStrategy(
   {
@@ -15,10 +13,7 @@ passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
       // Retrieve user data using the provided username
-      const identity = await UserORM.createQueryBuilder("users")
-        .leftJoinAndMapOne("users.installationId", InstallationORM, "installations", "users.installationId = installations.id")
-        .where("users.username = :username", { username: username })
-        .getOne();
+      const identity = await UserService.getUserByUsername(username);
 
       // Check if the user exists
       if (!identity) {

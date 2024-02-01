@@ -36,7 +36,7 @@ export class FilterEventDTO {
     @IsString()
     @MaxLength(20)
     @IsOptional()
-    material: string
+    materialDescription: string
 
     @IsString()
     @MaxLength(30)
@@ -50,5 +50,5 @@ export class FilterEventDTO {
     @IsInt()
     @Type(() => Number)
     @IsOptional()
-    idInstallation: number
+    installationId: number
 }

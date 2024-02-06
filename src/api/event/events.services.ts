@@ -12,7 +12,7 @@ export class EventService {
         // Create query to find cards filtered
         const events = AppDataSource.getRepository(EventORM)
         .createQueryBuilder("events")
-        .leftJoinAndMapOne("events.cardId", CardORM, "cards", "events.cardId = cards.id")
+        .leftJoinAndMapOne("events.cardCode", CardORM, "cards", "events.cardCode = cards.cardCode")
         .leftJoinAndMapOne("events.materialId", MaterialORM, "materials", "events.materialId = materials.id")
         .leftJoinAndMapOne("events.subjectId", SubjectORM, "subjects", "events.subjectId = subjects.id")
         .leftJoinAndMapOne("events.installationId", InstallationORM, "installations", "events.installationId = installations.id")

@@ -46,9 +46,9 @@ export class EventORM extends BaseEntity {
     note: string;
 
     @Index()
-    @Column({type: "int", nullable: true})
-    @JoinColumn({ name: 'cardId' })
-    cardId: number | CardORM | null;
+    @Column({type: "varchar", nullable: true})
+    @JoinColumn({ name: 'cardCode' })
+    cardCode: string | CardORM | null;
 
     @Index()
     @Column({type: "int", nullable: true})

@@ -29,7 +29,7 @@ export const AppDataSource = new DataSource({
   password: process.env.PASSWORD_DB, // Set the database password using the PASSWORD_DB environment variable
   database: process.env.NAME_DB, // Set the database name using the NAME_DB environment variable
   entities: [UserORM, SubjectORM, CardORM, InstallationORM, EventORM, MaterialORM], // Define the entities to be managed by TypeORM
-  synchronize: true, // Disable automatic synchronization of the schema with the database
+  synchronize: false, // Disable automatic synchronization of the schema with the database
   logging: false, // Disable logging by default
 });
 

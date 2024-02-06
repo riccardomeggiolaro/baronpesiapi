@@ -9,7 +9,6 @@ export class InstallationORM extends BaseEntity {
     @Column({type: "varchar", length: 50, nullable: false})
     installationCode: string;
 
-    @Index()
     @Column({type: "varchar", length: 50, nullable: false})
     description: string;
 

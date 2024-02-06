@@ -21,8 +21,8 @@ export const signin = async (req: TypedRequest<SigninUserDTO>, res: Response, ne
         const userData: User = omit(req.body, 'username', 'password', 'idInstallation'); // Create an object with body data exept for username, password and idInstallation
         const credentials = pick(req.body, 'username', 'password'); // Create an object that pick from body only username and password
         // If it was passed idInstallation
-        if(req.body.idInstallation){
-            const installation = await InstallationService.getById(req.body.idInstallation); // Find the installation
+        if(req.body.installationId){
+            const installation = await InstallationService.getById(req.body.installationId); // Find the installation
             userData.installationId = installation?.id! // Add the installation found to the object userData
         }
         const newUser = await UserService.add(userData, credentials); // Add the new user

@@ -1,4 +1,5 @@
 import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, Index, JoinColumn } from "typeorm"
+import { InstallationORM } from "../installation/installation.entity";
 
 // Create entity ORM to map the table users
 @Entity("users")
@@ -13,7 +14,7 @@ export class UserORM extends BaseEntity {
     @Column({type: "varchar", length: 255, nullable: false})
     hashedPassword: string;
 
-    @Column({type: "int", width: 11, nullable: false})
+    @Column({type: "int", nullable: false})
     accessLevel: number;
 
     @Column({type: "tinyint", default: 1, nullable: false})
@@ -24,5 +25,5 @@ export class UserORM extends BaseEntity {
 
     @Column({type: "int", nullable: true})
     @JoinColumn({ name: 'installationId' }) // Join on the categoryId column
-    installationId: number | null;
+    installationId: number | InstallationORM | null;
 }

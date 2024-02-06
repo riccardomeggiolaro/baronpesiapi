@@ -10,6 +10,7 @@ export class CardORM extends BaseEntity {
     @Column({type: "varchar", length: 30, nullable: false})
     cardCode: string;
 
+    @Index()
     @Column({type: "char", length: 5, nullable: false})
     numberCard: string;
 
@@ -23,10 +24,10 @@ export class CardORM extends BaseEntity {
     @JoinColumn({ name: 'materialId' })
     materialId: number;
 
-    @Column({type: "int", nullable: true})
+    @Column({type: "int", default: 0, nullable: false})
     tare: number;
 
-    @Column({type: "varchar", length: 30, nullable: true})
+    @Column({type: "varchar", length: 50, nullable: true})
     note: string;
 
     @Column({type: "int", nullable: true})

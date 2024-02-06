@@ -5,7 +5,6 @@ import { FilterUserDTO } from "./user.dto";
 import { NotFoundError } from "../../errors/not-found";
 import { InstallationORM } from "../installation/installation.entity";
 import { superAdmin } from "../../global";
-import { use } from "passport";
 
 export class UserService {
     async hashPAssword(password: string) {

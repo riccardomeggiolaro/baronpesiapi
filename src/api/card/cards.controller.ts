@@ -6,6 +6,7 @@ import { hasKeyValuePairs } from "../../utils/has-values-object";
 
 export const listCards = async (req: TypedRequest<any, FilterCardDTO>, res: Response, next: NextFunction) => {
     try{
+        console.log(req.query)
         const filterParams: FilterCardDTO = req.query; // Extract filter parameters from the request query
         const cards = await CardService.list(filterParams); // Fetch cards using CardService.list, passing the filter parameters
         res.json(cards); // Return a successful response with the retrieved cards

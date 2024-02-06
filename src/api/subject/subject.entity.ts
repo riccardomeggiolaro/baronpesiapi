@@ -10,9 +10,9 @@ export class SubjectORM extends BaseEntity {
     @Column({type: "varchar", length: 50, nullable: false})
     socialReason: string;
 
-    @Column({type: "int", width: 9, nullable: true})
+    @Column({type: "int", nullable: true})
     telephoneNumber: number;
 
-    @Column({type: "varchar", nullable: true})
+    @Column({type: "varchar", length: 30, nullable: true})
     CFPIVA: string;
 }

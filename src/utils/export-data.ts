@@ -9,16 +9,16 @@ const exportData = (data) => {
     return {
       "Progr": k.progressive,
       "Data": new Date(k.dt_create).toLocaleString(),
-      "Numero carta": k.numberCard,
+      "Numero carta": k.cardId?.numberCard,
       "Veicolo": k.vehicle,
       "Targa": k.plate,
-      "Ragione sociale": k.socialReason,
+      "Ragione sociale": k.subjectId?.socialReason,
       "Pid1": k.pid1,
       "Pid2": k.pid2,
       "Peso1": k.weight1,
       "Peso2": k.weight2,
       "Netto": k.netWeight,
-      "Materiale": k.material,
+      "Materiale": k.materialId?.description,
       "Installazione": k.installationId?.description,
     }
   })
@@ -54,16 +54,16 @@ export const exportPdf = (data) => {
     return [
       k.progressive,
       new Date(k.dt_create).toLocaleString(),
-      k.numberCard || "",
-      k.vehicle,
+      k.cardId?.numberCard || "",
+      k.vehicle || "",
       k.plate || "",
-      k.socialReason || "",
+      k.subjectId?.socialReason,
       (k.pid1 || "") + "\n" + (x.pid2 || ""),
       k.weight1 || "",
       k.weight2 || "",
       k.netWeight || "",
-      k.material || "",
-      k.installationId?.description || "",
+      k.materialId?.description,
+      k.installationId?.description,
     ]
   })
   // Create an object with headers and data changed

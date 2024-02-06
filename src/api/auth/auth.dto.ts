@@ -17,13 +17,13 @@ export class SigninUserDTO {
     @IsNumber()
     @Min(1)
     @Max(gbl.classicAdmin)
-    @IsAssignableToAdmin('idInstallation', { message: `L'installazione è da assegnare solo se il livello di accesso è minore di ${gbl.classicAdmin}` })
+    @IsAssignableToAdmin('installationId', { message: `L'installazione è da assegnare solo se il livello di accesso è minore di ${gbl.classicAdmin}` })
     accessLevel: number;
 
     @IsNumber()
     @Exist("installation", {message: "Installazione non esistente"})
     @IsOptional()
-    idInstallation: number;
+    installationId: number;
 }
 
 export class LoginUserDTO {

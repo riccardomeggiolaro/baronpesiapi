@@ -60,7 +60,7 @@ export class EventORM extends BaseEntity {
     @JoinColumn({ name: 'subjectId' })
     subjectId: number | SubjectORM | null;
 
-    @Column({type: "bigint", width: 20, nullable: true})
+    @Column({type: "bigint", width: 20, nullable: false})
     @JoinColumn({ name: 'rawid' })
     rawid: number;
 

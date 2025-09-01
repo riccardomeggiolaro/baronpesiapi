@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, Max, MaxLength } from "class-validator";
+import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
 import { Exist } from "../../utils/validators/exist";
 
 export class IDCardDTO{
@@ -25,6 +25,7 @@ export class FilterCardDTO {
 
     @IsInt()
     @Max(99999)
+    @Min(1)
     @IsOptional()
     @Type(() => Number)
     tare: number;
@@ -62,6 +63,7 @@ export class UpdateCardDTO {
 
     @IsInt()
     @Max(99999)
+    @Min(1)
     @IsOptional()
     @Type(() => Number)
     tare: number;

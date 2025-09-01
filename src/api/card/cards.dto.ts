@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsInt, IsOptional, IsString, Max, MaxLength } from "class-validator";
 import { Exist } from "../../utils/validators/exist";
 
 export class IDCardDTO{
@@ -23,16 +23,16 @@ export class FilterCardDTO {
     @IsOptional()
     plate: string;
 
+    @IsInt()
+    @Max(99999)
+    @IsOptional()
+    @Type(() => Number)
+    tare: number;
+
     @IsString()
     @MaxLength(30)
     @IsOptional()
     materialDescription: number;
-
-    @IsInt()
-    @MaxLength(30)
-    @IsOptional()
-    @Type(() => Number)
-    tare: number;
 
     @IsString()
     @MaxLength(30)
@@ -61,14 +61,15 @@ export class UpdateCardDTO {
     plate: string;
 
     @IsInt()
-    @IsOptional()
-    @Exist("material", {message: "Materiale non esistente"})
-    materialId: number;
-
-    @IsInt()
+    @Max(99999)
     @IsOptional()
     @Type(() => Number)
     tare: number;
+
+    @IsInt()
+    @IsOptional()
+    @Exist("material", {message: "Materiale non esistente"})
+    materialId: number;
 
     @IsString()
     @IsOptional()

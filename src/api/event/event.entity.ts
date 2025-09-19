@@ -4,17 +4,30 @@ import { SubjectORM } from "../subject/subject.entity";
 import { InstallationORM } from "../installation/installation.entity";
 import { MaterialORM } from "../material/material.entity";
 
+// Transformer per gestire il fuso orario
+export class TimezoneTransformer {
+    to(value: Date): Date {
+        return value; // Non modificare quando salvi
+    }
+
+    from(value: Date): Date {
+        if (!value) return value;
+        // Aggiungi 2 ore quando leggi dal database
+        return new Date(value.getTime() + (2 * 60 * 60 * 1000));
+    }
+}
+
 // Create entity ORM to map the table events
 @Entity("events", {orderBy: { dt_create: 'DESC' }})
 export class EventORM extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP"})
+    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", transformer: new TimezoneTransformer()})
     dt_insert: Date;
 
     @Index()
-    @Column({type: "datetime", nullable: true})
+    @Column({type: "datetime", nullable: true, transformer: new TimezoneTransformer()})
     dt_create: Date;
 
     @Column({type: "bigint", nullable: true})

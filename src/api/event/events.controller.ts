@@ -21,8 +21,17 @@ const exportableObjectEvents = (data) => {
     const k = x as any;
     return {
       "Progr": k.progressive,
-      "Data": new Date(k.dt_create).toLocaleString("it-IT", { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      "Ora": new Date(k.dt_create).toLocaleString("it-IT", { hour: '2-digit', minute: '2-digit' }),
+      "Data": new Date(k.dt_create).toLocaleDateString("it-IT", { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit',
+        timeZone: 'UTC'
+      }),
+      "Ora": new Date(k.dt_create).toLocaleTimeString("it-IT", { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZone: 'UTC'
+      }),
       "Numero carta": k.cardCode?.numberCard,
       "Veicolo": k.vehicle,
       "Targa": k.plate,
@@ -45,8 +54,17 @@ const exportableArrayEvents = (data) => {
     const k = x as any;
     return [
       k.progressive,
-      new Date(k.dt_create).toLocaleDateString("it-IT", { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      new Date(k.dt_create).toLocaleTimeString("it-IT", { hour: '2-digit', minute: '2-digit' }),
+      new Date(k.dt_create).toLocaleDateString("it-IT", { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit',
+        timeZone: 'UTC'
+      }),
+      new Date(k.dt_create).toLocaleTimeString("it-IT", { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZone: 'UTC'
+      }),
       k.cardCode?.numberCard || "",
       k.vehicle || "",
       k.plate || "",

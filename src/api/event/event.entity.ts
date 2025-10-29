@@ -1,19 +1,23 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Index, JoinColumn } from "typeorm";
+import { format } from 'date-fns';
 import { CardORM } from "../card/card.entity";
 import { SubjectORM } from "../subject/subject.entity";
 import { InstallationORM } from "../installation/installation.entity";
 import { MaterialORM } from "../material/material.entity";
 
-// Transformer per gestire il fuso orario
-export class TimezoneTransformer {
-    to(value: Date): Date {
+// Transformer elegante per gestire il fuso orario italiano
+export class ItalianTimezoneTransformer {
+    to(value: Date | null | undefined): Date | null | undefined {
         return value; // Non modificare quando salvi
     }
 
-    from(value: Date): Date {
+    from(value: Date | null | undefined): Date | null | undefined {
         if (!value) return value;
-        // Aggiungi 2 ore quando leggi dal database
-        return new Date(value.getTime() + (2 * 60 * 60 * 1000));
+        
+        // JavaScript converte automaticamente da UTC al timezone locale del server
+        // Formatta la data locale come stringa ISO e crea una nuova Date
+        const localIsoString = format(value, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return new Date(localIsoString);
     }
 }
 
@@ -23,11 +27,11 @@ export class EventORM extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", transformer: new TimezoneTransformer()})
+    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", transformer: new ItalianTimezoneTransformer()})
     dt_insert: Date;
 
     @Index()
-    @Column({type: "datetime", nullable: true, transformer: new TimezoneTransformer()})
+    @Column({type: "datetime", nullable: true, transformer: new ItalianTimezoneTransformer()})
     dt_create: Date;
 
     @Column({type: "bigint", nullable: true})
@@ -43,7 +47,7 @@ export class EventORM extends BaseEntity {
     weight2: number;
 
     @Column({type: "varchar", length: 12, nullable: true})
-    pid2: number;
+    pid2: string;
 
     @Column({type: "bigint", nullable: true})
     netWeight: number;
